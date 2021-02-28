@@ -4,13 +4,14 @@ const CUPS_BRACKETS_FINAL = 3;
 
 function UpdateCupPanel(cup) {
 	const armies = cup["armies"];
+	const brackets = cup["brackets"];
 	for (let i = CUPS_BRACKETS_QUARTER; i < CUPS_BRACKETS_FINAL + 1; i++) {
-		const duels = cup["brackets"][i];
+		const duels = brackets[i];
 		if (duels != null) {
 			for (var duelKey in duels) {
 				const duel = duels[duelKey];
 				for (var armyKey in duel) {
-					FillArmySlot($("#ArmySlot" + i + duelKey + armyKey), cup["armies"][duel[armyKey]]);
+					FillArmySlot($("#ArmySlot" + i + duelKey + armyKey), armies[duel[armyKey]]);
 				}	
 			}
 		}
@@ -18,8 +19,8 @@ function UpdateCupPanel(cup) {
 	$("#Brackets").FindChildrenWithClassTraverse("ArmyDuel").forEach(function(panel) {
 		panel.SetHasClass("Current", false);
 	});
-	let currentBracket = cup["current"][1];
-	$("#ArmyDuel"+cup["current"][1]+cup["current"][2]).AddClass("Current");
+	let current = cup["current"];
+	$("#ArmyDuel"+current["bracket"]+current["duel"]).AddClass("Current");
 }
 
 function FillArmySlot(armySlotPanel, army) {
@@ -34,10 +35,12 @@ function FillArmySlot(armySlotPanel, army) {
 }
 
 function UpdateCupPreviewPanel(cup) {
-	let currentBracket = cup["current"][1];
-	let armies = cup["brackets"][currentBracket];
-	FillArmySlot($("#StatusSlot0"), cup["armies"]["1"]);
-	FillArmySlot($("#StatusSlot1"), cup["armies"]["2"]);
+	let current = cup["current"];
+	let currentDuel = current["duel"];
+	let currentBracket = current["bracket"];
+	let armies = cup["brackets"][currentBracket][currentDuel];
+	FillArmySlot($("#StatusSlot0"), cup["armies"][armies["1"]]);
+	FillArmySlot($("#StatusSlot1"), cup["armies"][armies["2"]]);
 }
 
 function OnCupsNetTableChanged(table_name, key, data) {

@@ -23,7 +23,7 @@ function Cups:CreateCup()
 	for i = 1, CUPS_ARMY_COUNT, 2 do
 		table.insert(cup.brackets[CUPS_BRACKETS_QUARTER], {i, i+1})
 	end
-	cup.current = {CUPS_BRACKETS_QUARTER, 1}
+	cup.current = {bracket=CUPS_BRACKETS_QUARTER, duel=1}
 
 	table.print(cup)
 

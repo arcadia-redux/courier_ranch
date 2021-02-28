@@ -1,0 +1,94 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c"/>
+		<include src="file://{resources}/layout/custom_game/cup/cup.css"/>
+	</styles>
+
+	<scripts>
+		<include src="file://{resources}/layout/custom_game/util.js"/>
+		<include src="file://{resources}/layout/custom_game/cup/cup.js"/>
+	</scripts>
+	<snippets>
+		<snippet name="Army">
+			<Panel class="Army">
+				<Panel class="Units">
+				
+				</Panel>
+			</Panel>
+		</snippet>
+	</snippets>
+	<Panel style="width:100%;height:100%;" hittest="false">
+		<Panel id="CupStatus">
+			<Panel class="ArmyRow">
+				<Panel class="ArmyDuel">
+					<Panel class="ArmySlot" id="StatusSlot0">
+					</Panel>
+					<Panel class="ArmySlot" id="StatusSlot1">
+					</Panel>
+				</Panel>
+			</Panel>
+			<Button id="DetailsButton" class="ButtonBevel" onactivate="OnDetailsButtonPressed()">
+				<Label text="DETAILS" />
+			</Button>
+		</Panel>
+		<Panel id="Cup">
+			<Panel id="CloseButton" class="ButtonBevel" onactivate="OnCloseButtonPressed()" hittest="true">
+			</Panel>
+			<Panel id="Brackets">
+				<Panel class="ArmyRow Winner">
+					<Panel class="ArmySlot" id="WinnerSlot">
+					</Panel>
+				</Panel>
+				<Panel class="ArmyRow Final">
+					<Panel class="ArmyDuel" id="ArmyDuel31">
+						<Panel class="ArmySlot" id="ArmySlot311">
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot312">
+						</Panel>
+					</Panel>
+				</Panel>
+				<Panel class="ArmyRow">
+					<Panel class="ArmyDuel" id="ArmyDuel21">
+						<Panel class="ArmySlot" id="ArmySlot211">
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot212">
+						</Panel>
+					</Panel>
+					<Panel class="ArmyDuel" id="ArmyDuel22">	
+						<Panel class="ArmySlot" id="ArmySlot221">
+						
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot222">
+						</Panel>
+					</Panel>
+				</Panel>
+				<Panel class="ArmyRow">
+					<Panel class="ArmyDuel" id="ArmyDuel11">
+						<Panel class="ArmySlot" id="ArmySlot111">
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot112">
+						</Panel>
+					</Panel>
+					<Panel class="ArmyDuel" id="ArmyDuel12">
+						<Panel class="ArmySlot" id="ArmySlot121">
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot122">
+						</Panel>
+					</Panel>
+					<Panel class="ArmyDuel" id="ArmyDuel13">
+						<Panel class="ArmySlot" id="ArmySlot131">
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot132">
+						</Panel>
+					</Panel>
+					<Panel class="ArmyDuel" id="ArmyDuel14">
+						<Panel class="ArmySlot" id="ArmySlot141">
+						</Panel>
+						<Panel class="ArmySlot" id="ArmySlot142">
+						</Panel>
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

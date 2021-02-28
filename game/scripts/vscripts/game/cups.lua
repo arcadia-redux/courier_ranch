@@ -1,6 +1,7 @@
 if Cups == nil then Cups = class({}) end
 
 require("game/armies")
+require("game/maps/dota_mini")
 
 CUPS_ARMY_COUNT = 8
 
@@ -25,11 +26,28 @@ function Cups:CreateCup()
 	end
 	cup.current = {bracket=CUPS_BRACKETS_QUARTER, duel=1}
 
-	table.print(cup)
-
 	CustomNetTables:SetTableValue("cups", "active", cup)
+
+	self:SpawnCurrentCreeps()
 end
 
 function Cups:MainLoop()
 
+end
+
+function Cups:SpawnCurrentCreeps()
+	local creeps_goodguys, creeps_badguys = self:GetCurrentDuelArmies()
+	DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
+end
+
+function Cups:GetCurrentDuelArmies()
+	local cup = CustomNetTables:GetTableValue("cups", "active")
+
+	local armies = cup.armies
+	local brackets = cup.brackets
+
+	local current_bracket = brackets[tostring(cup.current.bracket)]
+	local current_duel = current_bracket[tostring(cup.current.duel)]
+
+	return armies[tostring(current_duel["1"])], armies[tostring(current_duel["2"])]
 end

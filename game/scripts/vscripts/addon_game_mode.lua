@@ -1,8 +1,10 @@
 _G.GameMode = GameMode or {}
 
+require("libraries/timers")
+
 require("extensions/init")
 
-require("game/cups")
+require("game/WWW")
 require("game/armies")
 
 function Precache( context )
@@ -34,7 +36,7 @@ function GameMode:InitGameMode()
 	game_mode_entity:SetFogOfWarDisabled(true)
 
 	Armies:Init()
-	Cups:Init()
+	WWW:Init()
 
 	ListenToGameEvent("game_rules_state_change", Dynamic_Wrap(GameMode, 'OnGameRulesStateChange'),  self)
 end
@@ -45,7 +47,7 @@ function GameMode:OnGameRulesStateChange()
 		GameMode:OnEnteredCustomGameSetup()
 	elseif state == DOTA_GAMERULES_STATE_HERO_SELECTION then
 	elseif state == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		Cups:CreateCup()
+		WWW:CreateCup()
 	elseif state >= DOTA_GAMERULES_STATE_POST_GAME then
 	end
 end

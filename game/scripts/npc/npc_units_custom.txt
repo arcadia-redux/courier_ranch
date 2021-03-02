@@ -2,91 +2,83 @@
 "DOTAUnits"
 {
 	"Version"	"1"
-	
-	//=================================================================================	
-	// Creature: Gnoll Assassin
-	//=================================================================================
-	"npc_dota_creature_gnoll_assassin"	
+
+	"npc_dota_neutral_centaur_outrunner"
 	{
-		// General
-		//----------------------------------------------------------------
-		"Model"						"models/creeps/neutral_creeps/n_creep_gnoll/n_creep_gnoll_frost.vmdl"	// Model.
 		"BaseClass"					"npc_dota_creature"
-		"SoundSet"					"n_creep_Ranged"
-		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
-		"Level"						"1"
-		"ModelScale" 				".9"
+	}
+	
+	"npc_dota_neutral_centaur_khan"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Abilities
-		//----------------------------------------------------------------
-		"Ability1"					""			// Ability 1
-		"Ability2"					""			// Ability 2
-		"Ability3"					""			// Ability 3
-		"Ability4"					""			// Ability 4
+	"npc_dota_neutral_fel_beast"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Armor
-		//----------------------------------------------------------------
-		"ArmorPhysical"				"1"			// Physical protection.
+	"npc_dota_neutral_polar_furbolg_champion"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Attack
-		//----------------------------------------------------------------
-		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
-		"AttackDamageMin"			"30"		// Damage range min.
-		"AttackDamageMax"			"36"		// Damage range max.
-		"AttackRate"				"1.6"		// Speed of attack.
-		"AttackAnimationPoint"		"0.4"		// Normalized time in animation cycle to attack.
-		"AttackAcquisitionRange"	"800"		// Range within a target can be acquired.
-		"AttackRange"				"500"		// Range within a target can be attacked.
-		"ProjectileModel"			"particles/neutral_fx/gnoll_base_attack.vpcf" // Particle system model for projectile.
-		"ProjectileSpeed"			"1500"		// Speed of projectile.		     
+	"npc_dota_neutral_rock_golem"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Bounds
-		//----------------------------------------------------------------
-		"RingRadius"				"40"
-		"HealthBarOffset"			"170"
+	"npc_dota_neutral_kobold"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Bounty
-		//----------------------------------------------------------------
-		"BountyXP"					"24"		// Experience earn.
-		"BountyGoldMin"				"21"		// Gold earned min.
-		"BountyGoldMax"				"29"		// Gold earned max.
+	"npc_dota_neutral_kobold_tunneler"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Movement
-		//----------------------------------------------------------------
-		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
-		"MovementSpeed"				"270"		// Speed.			
+	"npc_dota_neutral_kobold_taskmaster"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Status
-		//----------------------------------------------------------------
-		"StatusHealth"				"75"		// Base health.
-		"StatusHealthRegen"			"0.5"		// Health regeneration rate.
-		"StatusMana"				"0"			// Base mana.
-		"StatusManaRegen"			"0.0"		// Mana regeneration rate.		 
-		
-		// Vision
-		//----------------------------------------------------------------
-		"VisionDaytimeRange"		"400"		// Range of vision during day light.
-		"VisionNighttimeRange"		"400"		// Range of vision at night time.
+	"npc_dota_neutral_black_dragon"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Team
-		//----------------------------------------------------------------
-		"TeamName"					"DOTA_TEAM_NEUTRALS"						// Team name.
-		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_PIERCE"
-		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
-		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	"npc_dota_neutral_big_thunder_lizard"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
 
-		// Creature Data
-		//----------------------------------------------------------------
-		"Creature"
-		{
-			//Level Up
-			"HPGain"					"50"
-			"DamageGain"				"2"
-			"ArmorGain"					"0.25"
-			"MagicResistGain"			"0.1"
-			"MoveSpeedGain"				"1"
-			"BountyGain"				"3"
-			"XPGain"					"15"
-		}
+	"npc_dota_neutral_granite_golem"
+	{
+		"BaseClass"					"npc_dota_creature"
+	}
+
+	"npc_dota_badguys_tower1_bot"
+	{
+		"StatusHealth"				"50"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_NO_ATTACK"
+	}
+
+	"npc_dota_goodguys_tower1_bot"
+	{
+		"StatusHealth"				"50"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_NO_ATTACK"
+	}
+
+	"npc_dota_badguys_fort"
+	{
+		"StatusHealth"				"50"
+		"StatusHealthRegen"			"0"
+	}
+
+	"npc_dota_goodguys_fort"
+	{
+		"StatusHealth"				"50"
+		"StatusHealthRegen"			"0"
 	}
 }

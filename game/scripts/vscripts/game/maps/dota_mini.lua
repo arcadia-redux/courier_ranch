@@ -1,28 +1,43 @@
-if DotaMini == nil then DotaMini = class({}) end
+require("game/maps/util")
+
+if DotaMini == nil then
+	DotaMini = NewMap()
+	DotaMini.spawn_locations_goodguys_name = "dota_mini_goodguys_spawn"
+	DotaMini.spawn_locations_badguys_name = "dota_mini_badguys_spawn"
+end
+
+function DotaMini:Init()
+	self.spawn_locations_goodguys = ExtractEntitiesLocations(self.spawn_locations_goodguys_name)
+	self.spawn_locations_badguys = ExtractEntitiesLocations(self.spawn_locations_badguys_name)
+
+	self.waypoints_top = ExtractWaypointsLocations("dota_mini_waypoint_*_top")
+	self.waypoints_bottom = ExtractWaypointsLocations("dota_mini_waypoint_*_bottom")
+end
 
 function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
-	local spawn_locations_goodguys = ExtractEntitiesLocations("dota_mini_goodguys_spawn")
-	local spawn_locations_badguys = ExtractEntitiesLocations("dota_mini_badguys_spawn")
-
-	SpawnCreepsAtLocationsForTeam(creeps_goodguys, spawn_locations_goodguys, DOTA_TEAM_GOODGUYS)
-	SpawnCreepsAtLocationsForTeam(creeps_badguys, spawn_locations_badguys, DOTA_TEAM_BADGUYS)
-end
-
-function SpawnCreepsAtLocationsForTeam(creeps, locations, team)
-	for _,location in pairs(locations) do
-		for _,creep in pairs(creeps) do
-			local creep = CreateUnitByName(creep, location, true, nil, nil, team)
-			ParticleManager:CreateParticle("particles/econ/events/pw_compendium_2014/teleport_end_ground_flash_pw2014.vpcf", PATTACH_ABSORIGIN, creep)
+	-- 1 is bottom; 2 is top
+	-- Goodguys
+	for i=1,2 do
+		local waypoints = nil
+		if i == 1 then
+			waypoints = self.waypoints_top
+		else
+			waypoints = self.waypoints_bottom
 		end
+		SpawnCreepsAtLocationForTeam(creeps_goodguys, self.spawn_locations_goodguys[i], DOTA_TEAM_GOODGUYS, function (creep)
+			StartBasicWaypointAI(creep, waypoints)
+		end)
 	end
-end
-
--- @TOMOVE
-function ExtractEntitiesLocations(name)
-	local t = {}
-	local ents = Entities:FindAllByName(name)
-	for _,ent in pairs(ents) do
-		table.insert(t, ent:GetAbsOrigin())
+	-- Badguys
+	for i=1,2 do
+		local waypoints = nil
+		if i == 1 then
+			waypoints = self.waypoints_bottom
+		else
+			waypoints = self.waypoints_top
+		end
+		SpawnCreepsAtLocationForTeam(creeps_badguys, self.spawn_locations_badguys[i], DOTA_TEAM_BADGUYS, function (creep)
+			StartBasicWaypointAI(creep, waypoints, true)
+		end)
 	end
-	return t
 end

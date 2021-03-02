@@ -1,4 +1,4 @@
-if Cups == nil then Cups = class({}) end
+if WWW == nil then WWW = class({}) end
 
 require("game/armies")
 require("game/maps/dota_mini")
@@ -9,11 +9,21 @@ CUPS_BRACKETS_QUARTER = 1
 CUPS_BRACKETS_SEMI = 2
 CUPS_BRACKETS_FINAL = 3
 
-function Cups:Init()
-	
+function WWW:Init()
+	LinkLuaModifier( "creep_aura", "game/modifiers/creep_aura", LUA_MODIFIER_MOTION_NONE )
+	LinkLuaModifier( "player_aura", "game/modifiers/player_aura", LUA_MODIFIER_MOTION_NONE )
+
+	ListenToGameEvent('npc_spawned', Dynamic_Wrap(WWW, "OnHeroSpawned"), WWW)
 end
 
-function Cups:CreateCup()
+function WWW:OnHeroSpawned(keys)
+	local npc = EntIndexToHScript(keys.entindex)
+	if npc:IsRealHero() then
+		npc:AddNewModifier( npc, nil, "player_aura", {} )
+	end
+end
+
+function WWW:CreateCup()
 	local cup = {}
 
 	cup.armies = Armies:GetRandomArmiesDefault(CUPS_ARMY_COUNT)
@@ -26,21 +36,27 @@ function Cups:CreateCup()
 	end
 	cup.current = {bracket=CUPS_BRACKETS_QUARTER, duel=1}
 
+	-- Select Map
+	cup.map = "DotaMini"
+
+	-- @TODO
+	-- Optimize table usage
 	CustomNetTables:SetTableValue("cups", "active", cup)
 
+	GetCurrentMap():Init()
 	self:SpawnCurrentCreeps()
 end
 
-function Cups:MainLoop()
+function WWW:MainLoop()
 
 end
 
-function Cups:SpawnCurrentCreeps()
+function WWW:SpawnCurrentCreeps()
 	local creeps_goodguys, creeps_badguys = self:GetCurrentDuelArmies()
-	DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
+	GetCurrentMap():SpawnCreeps(creeps_goodguys, creeps_badguys)
 end
 
-function Cups:GetCurrentDuelArmies()
+function WWW:GetCurrentDuelArmies()
 	local cup = CustomNetTables:GetTableValue("cups", "active")
 
 	local armies = cup.armies
@@ -50,4 +66,9 @@ function Cups:GetCurrentDuelArmies()
 	local current_duel = current_bracket[tostring(cup.current.duel)]
 
 	return armies[tostring(current_duel["1"])], armies[tostring(current_duel["2"])]
+end
+
+function GetCurrentMap()
+	local cup = CustomNetTables:GetTableValue("cups", "active")
+	return _G[cup.map]
 end

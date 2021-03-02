@@ -1,7 +1,7 @@
 if Armies == nil then Armies = class({}) end
 
 function Armies:Init()
-	Armies["Units"] = LoadKeyValues("scripts/kv/armies.kv")
+	self["Units"] = LoadKeyValues("scripts/kv/armies.kv")
 end
 
 function Armies:GetRandomArmiesDefault(count)
@@ -17,4 +17,60 @@ function Armies:GetRandomArmiesDefault(count)
     end
 
 	return armies
+end
+
+-- Returns spawned creeps
+function Armies:SpawnCreepsAtLocationForTeam(creeps, location, team, creep_spawned_callback)
+	local o = {}
+	-- 1 is small; 2 is medium; 3 is large
+	for s,creep in pairs(creeps) do
+		local count = tonumber(s)*2
+		for i=1,count do
+			local creep = CreateUnitByName(creep, location, true, nil, nil, team)
+			creep:AddNewModifier( creep, nil, "creep_aura", {} )
+			ParticleManager:CreateParticle("particles/econ/events/pw_compendium_2014/teleport_end_ground_flash_pw2014.vpcf", PATTACH_ABSORIGIN, creep)
+			table.insert(o, creep)
+			if creep_spawned_callback ~= nil then
+				creep_spawned_callback(creep)
+			end
+		end
+	end
+	return o
+end
+
+function Armies:StartBasicWaypointAI(creep, waypoints, reverse)
+	local number_of_waypoints = table.getn(waypoints)
+
+	local current_waypoint = 1
+	if reverse then
+		current_waypoint = number_of_waypoints
+	end
+
+	function NextWaypoint()
+		if reverse then
+			current_waypoint = current_waypoint - 1
+		else
+			current_waypoint = current_waypoint + 1
+		end
+	end
+
+	Timers:CreateTimer(function()
+		if IsValidEntity(creep) == false then
+			return nil
+		end
+		if (waypoints[current_waypoint] - creep:GetAbsOrigin()):Length2D() < 200 then
+			if reverse then
+				current_waypoint = current_waypoint - 1
+			else
+				current_waypoint = current_waypoint + 1
+			end
+			if waypoints[current_waypoint] == nil then
+				return nil
+			end
+		end
+		if creep:IsAttacking() == false then
+			creep:MoveToPositionAggressive(waypoints[current_waypoint])
+		end
+		return 0.5
+	end)
 end

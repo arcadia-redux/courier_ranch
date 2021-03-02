@@ -5,6 +5,7 @@ require("libraries/timers")
 require("extensions/init")
 
 require("game/WWW")
+require("game/couriers")
 require("game/armies")
 
 function Precache( context )
@@ -26,7 +27,7 @@ function GameMode:InitGameMode()
 	game_mode_entity.GameMode = self
 
 	GameRules:SetStartingGold(10000)
-	GameRules:SetPreGameTime(5)
+	GameRules:SetPreGameTime(10)
 	GameRules:SetStrategyTime(0)
 	GameRules:SetShowcaseTime(0)
 	GameRules:EnableCustomGameSetupAutoLaunch(true)
@@ -36,6 +37,7 @@ function GameMode:InitGameMode()
 	game_mode_entity:SetFogOfWarDisabled(true)
 
 	Armies:Init()
+	Couriers:Init()
 	WWW:Init()
 
 	ListenToGameEvent("game_rules_state_change", Dynamic_Wrap(GameMode, 'OnGameRulesStateChange'),  self)

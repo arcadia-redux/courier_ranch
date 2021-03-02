@@ -1,4 +1,5 @@
-// Units File
+#base "couriers/npc_courier_donkey.txt"
+
 "DOTAUnits"
 {
 	"Version"	"1"
@@ -72,13 +73,23 @@
 
 	"npc_dota_badguys_fort"
 	{
+		"BaseClass"					"npc_dota_building"
+		"Model"						"models/props_structures/dire_ancient_base001.vmdl"
+		"ModelScale" 				".8"
 		"StatusHealth"				"50"
 		"StatusHealthRegen"			"0"
+		"Ability1"					""
+		"vscripts"					"game/unit_scripts/remove_modifiers"
 	}
 
 	"npc_dota_goodguys_fort"
 	{
+		"BaseClass"					"npc_dota_building"
+		"Model"						"models/props_structures/radiant_ancient001.vmdl"
+		"ModelScale" 				".8"
 		"StatusHealth"				"50"
 		"StatusHealthRegen"			"0"
+		"Ability1"					""
+		"vscripts"					"game/unit_scripts/remove_modifiers"
 	}
 }

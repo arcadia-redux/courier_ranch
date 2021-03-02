@@ -2,6 +2,9 @@ const CUPS_BRACKETS_QUARTER = 1;
 const CUPS_BRACKETS_SEMI = 2;
 const CUPS_BRACKETS_FINAL = 3;
 
+const CupPanel = $("#Cup");
+const BracketsPanel = $("#Brackets");
+
 function UpdateCupPanel(cup) {
 	const armies = cup["armies"];
 	const brackets = cup["brackets"];
@@ -16,7 +19,7 @@ function UpdateCupPanel(cup) {
 			}
 		}
 	}
-	$("#Brackets").FindChildrenWithClassTraverse("ArmyDuel").forEach(function(panel) {
+	BracketsPanel.FindChildrenWithClassTraverse("ArmyDuel").forEach(function(panel) {
 		panel.SetHasClass("Current", false);
 	});
 	let current = cup["current"];
@@ -45,18 +48,17 @@ function UpdateCupPreviewPanel(cup) {
 
 function OnCupsNetTableChanged(table_name, key, data) {
 	if (key == "active") {
-		$.Msg(data);
 		UpdateCupPanel(data);
 		UpdateCupPreviewPanel(data);
 	}
 }
 
 function OnCloseButtonPressed() {
-	$("#Cup").visible = false;
+	CupPanel.visible = false;
 }
 
 function OnDetailsButtonPressed() {
-	$("#Cup").visible = true;
+	CupPanel.visible = true;
 }
 
 (function () {
@@ -64,15 +66,3 @@ function OnDetailsButtonPressed() {
 
 	HookAndFire("cups", OnCupsNetTableChanged);
 })();
-
-// TO MOVE
-function HookAndFire(tableName, callback) {
-	CustomNetTables.SubscribeNetTableListener(tableName, callback);
-	var data = CustomNetTables.GetAllTableValues(tableName);
-	if (data != null) {
-		for (var i = 0; i < data.length; ++i) {
-			var info = data[i];
-			callback(tableName, info.key, info.value);
-		}
-	}
-}

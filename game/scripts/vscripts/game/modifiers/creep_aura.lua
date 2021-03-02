@@ -12,18 +12,23 @@ function creep_aura:IsHidden()
     return true
 end
 
-function creep_aura:GetModifierMoveSpeedBonus_Constant( params )
+function creep_aura:GetModifierMoveSpeedBonus_Constant(params)
 	return 200
 end
 
-function creep_aura:GetModifierAttackSpeedBonus_Constant( params )
+function creep_aura:GetModifierAttackSpeedBonus_Constant(params)
 	return 200
+end
+
+function creep_aura:GetModifierPreAttack_BonusDamage(params)
+	return 75
 end
 
 function creep_aura:DeclareFunctions()
 	local funcs = {
 		MODIFIER_PROPERTY_MOVESPEED_BONUS_CONSTANT,
-		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT
+		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
+		MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE
 	}
 
 	return funcs

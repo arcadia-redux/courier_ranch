@@ -2,6 +2,7 @@
 {
 	custom_net_tables =
 	[
-		"cups"
+		"cups",
+		"couriers"
 	]
 }

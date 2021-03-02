@@ -1,6 +1,5 @@
 if WWW == nil then WWW = class({}) end
 
-require("game/armies")
 require("game/maps/dota_mini")
 
 CUPS_ARMY_COUNT = 8
@@ -45,10 +44,11 @@ function WWW:CreateCup()
 
 	GetCurrentMap():Init()
 	self:SpawnCurrentCreeps()
+	self:MainLoop()
 end
 
 function WWW:MainLoop()
-
+	Couriers:GrantCourierSelectionToPlayers()
 end
 
 function WWW:SpawnCurrentCreeps()

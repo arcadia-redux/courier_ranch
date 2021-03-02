@@ -24,8 +24,8 @@ function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
 		else
 			waypoints = self.waypoints_bottom
 		end
-		SpawnCreepsAtLocationForTeam(creeps_goodguys, self.spawn_locations_goodguys[i], DOTA_TEAM_GOODGUYS, function (creep)
-			StartBasicWaypointAI(creep, waypoints)
+		Armies:SpawnCreepsAtLocationForTeam(creeps_goodguys, self.spawn_locations_goodguys[i], DOTA_TEAM_GOODGUYS, function (creep)
+			Armies:StartBasicWaypointAI(creep, waypoints)
 		end)
 	end
 	-- Badguys
@@ -36,8 +36,8 @@ function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
 		else
 			waypoints = self.waypoints_top
 		end
-		SpawnCreepsAtLocationForTeam(creeps_badguys, self.spawn_locations_badguys[i], DOTA_TEAM_BADGUYS, function (creep)
-			StartBasicWaypointAI(creep, waypoints, true)
+		Armies:SpawnCreepsAtLocationForTeam(creeps_badguys, self.spawn_locations_badguys[i], DOTA_TEAM_BADGUYS, function (creep)
+			Armies:StartBasicWaypointAI(creep, waypoints, true)
 		end)
 	end
 end

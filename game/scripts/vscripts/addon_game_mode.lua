@@ -27,7 +27,7 @@ function GameMode:InitGameMode()
 	game_mode_entity.GameMode = self
 
 	GameRules:SetStartingGold(10000)
-	GameRules:SetPreGameTime(10)
+	GameRules:SetPreGameTime(0)
 	GameRules:SetStrategyTime(0)
 	GameRules:SetShowcaseTime(0)
 	GameRules:EnableCustomGameSetupAutoLaunch(true)
@@ -37,7 +37,6 @@ function GameMode:InitGameMode()
 	game_mode_entity:SetFogOfWarDisabled(true)
 
 	Armies:Init()
-	Couriers:Init()
 	WWW:Init()
 
 	ListenToGameEvent("game_rules_state_change", Dynamic_Wrap(GameMode, 'OnGameRulesStateChange'),  self)
@@ -46,10 +45,13 @@ end
 function GameMode:OnGameRulesStateChange()
 	local state = GameRules:State_Get()
 	if state == DOTA_GAMERULES_STATE_CUSTOM_GAME_SETUP then
+		Couriers:Init()
 		GameMode:OnEnteredCustomGameSetup()
 	elseif state == DOTA_GAMERULES_STATE_HERO_SELECTION then
+	elseif state == DOTA_GAMERULES_STATE_PRE_GAME then
+		Couriers:FillEmptyRanchos()
 	elseif state == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		WWW:CreateCup()
+		WWW:MainLoop()
 	elseif state >= DOTA_GAMERULES_STATE_POST_GAME then
 	end
 end

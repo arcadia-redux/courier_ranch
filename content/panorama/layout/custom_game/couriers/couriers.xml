@@ -20,6 +20,9 @@
 		</snippet>
 	</snippets>
 	<Panel style="width:100%;height:100%;" hittest="false">
+		<Button id="RanchoButton" class="ButtonBevel" onactivate="OnRanchoButtonPressed()">
+			<Label text="RANCHO" />
+		</Button>
 		<Panel id="CourierSelection">
 			<Panel id="CouriersRow">
 			</Panel>

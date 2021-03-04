@@ -1,6 +1,8 @@
 if Armies == nil then Armies = class({}) end
 
 function Armies:Init()
+	LinkLuaModifier("creep_aura", "game/modifiers/creep_aura", LUA_MODIFIER_MOTION_NONE)
+
 	self["Units"] = LoadKeyValues("scripts/kv/armies.kv")
 end
 
@@ -21,21 +23,27 @@ end
 
 -- Returns spawned creeps
 function Armies:SpawnCreepsAtLocationForTeam(creeps, location, team, creep_spawned_callback)
-	local o = {}
 	-- 1 is small; 2 is medium; 3 is large
 	for s,creep in pairs(creeps) do
 		local count = tonumber(s)*2
-		for i=1,count do
-			local creep = CreateUnitByName(creep, location, true, nil, nil, team)
-			creep:AddNewModifier( creep, nil, "creep_aura", {} )
-			ParticleManager:CreateParticle("particles/econ/events/pw_compendium_2014/teleport_end_ground_flash_pw2014.vpcf", PATTACH_ABSORIGIN, creep)
-			table.insert(o, creep)
-			if creep_spawned_callback ~= nil then
-				creep_spawned_callback(creep)
+		local i = 1
+		Timers:CreateTimer(function()
+			CreateUnitByNameAsync(creep, location, true, nil, nil, team, function (creep)
+				creep:AddNewModifier( creep, nil, "creep_aura", {} )
+				creep:AddNewModifier( creep, nil, "modifier_rooted", {} )
+				ParticleManager:CreateParticle("particles/econ/events/pw_compendium_2014/teleport_end_ground_flash_pw2014.vpcf", PATTACH_ABSORIGIN, creep)
+				if creep_spawned_callback ~= nil then
+					creep_spawned_callback(creep)
+				end
+			end)
+			i = i + 1
+			if i > count then
+				return nil
+			else
+				return 0.35
 			end
-		end
+		end)
 	end
-	return o
 end
 
 function Armies:StartBasicWaypointAI(creep, waypoints, reverse)

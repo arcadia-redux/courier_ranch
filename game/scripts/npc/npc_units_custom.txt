@@ -1,4 +1,4 @@
-#base "couriers/npc_courier_donkey.txt"
+#base "couriers/couriers.txt"
 
 "DOTAUnits"
 {
@@ -91,5 +91,12 @@
 		"StatusHealthRegen"			"0"
 		"Ability1"					""
 		"vscripts"					"game/unit_scripts/remove_modifiers"
+	}
+
+	"npc_dota_target_dummy"
+	{
+		"BaseClass"					"npc_dota_creature"
+		"Model"						"models/development/invisiblebox.vmdl"
+		"TeamName"					"DOTA_TEAM_NOTEAM"
 	}
 }

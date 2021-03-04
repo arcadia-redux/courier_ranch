@@ -1,4 +1,5 @@
-// Dota Heroes File
+#base "couriers/courier_abilities.txt"
+
 "DOTAAbilities"
 {
 	"Version"		"1"

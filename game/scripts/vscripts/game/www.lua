@@ -1,5 +1,7 @@
 if WWW == nil then WWW = class({}) end
 
+require("game/constants")
+require("game/util")
 require("game/maps/dota_mini")
 
 CUPS_ARMY_COUNT = 8
@@ -8,11 +10,23 @@ CUPS_BRACKETS_QUARTER = 1
 CUPS_BRACKETS_SEMI = 2
 CUPS_BRACKETS_FINAL = 3
 
-function WWW:Init()
-	LinkLuaModifier( "creep_aura", "game/modifiers/creep_aura", LUA_MODIFIER_MOTION_NONE )
-	LinkLuaModifier( "player_aura", "game/modifiers/player_aura", LUA_MODIFIER_MOTION_NONE )
+WWW_STATE_PREPARATION = 1
+WWW_STATE_CASTING = 2
+WWW_STATE_BETS = 3
+WWW_STATE_FIGHT = 4
+WWW_STATE_POST_FIGHT = 5
 
-	ListenToGameEvent('npc_spawned', Dynamic_Wrap(WWW, "OnHeroSpawned"), WWW)
+function WWW:Init()
+	LinkLuaModifier("player_aura", "game/modifiers/player_aura", LUA_MODIFIER_MOTION_NONE)
+	LinkLuaModifier("dummy_aura", "game/modifiers/dummy_aura", LUA_MODIFIER_MOTION_NONE)
+
+	ListenToGameEvent('npc_spawned', Dynamic_Wrap(self, "OnHeroSpawned"), self)
+
+	GameRules:GetGameModeEntity():SetExecuteOrderFilter(Dynamic_Wrap(WWW, "OrderFilter"), self)
+end
+
+function WWW:OrderFilter(event)
+	return Couriers:OrderFilter(event)
 end
 
 function WWW:OnHeroSpawned(keys)
@@ -44,10 +58,13 @@ function WWW:CreateCup()
 
 	GetCurrentMap():Init()
 	self:SpawnCurrentCreeps()
-	self:MainLoop()
 end
 
 function WWW:MainLoop()
+	self.state = WWW_STATE_PREPARATION
+
+	WWW:CreateCup()
+
 	Couriers:GrantCourierSelectionToPlayers()
 end
 

@@ -73,3 +73,10 @@ DOTAScenePanel
 {
 	color:rgb(255, 220, 23);
 }
+
+#RanchoButton
+{
+	vertical-align: bottom;
+	margin-bottom: 244px;
+	width: 244px;
+}

@@ -9,37 +9,35 @@ const CouriersRowPanel = $("#CouriersRow");
 
 let rarityMap = null;
 
-function ShowCourierSelection(selections, selectionKey) {
-	const couriers = selections[selectionKey];
+function ShowCourierSelection(couriers, selectionKey) {
 	CouriersRowPanel.RemoveAndDeleteChildren();
 	Object.keys(couriers).forEach(key => {
 		const courierKey = key;
-		const courier = couriers[courierKey];
+		const courierName = couriers[courierKey]["courier_name"];
 		const courierPanel = $.CreatePanel("Panel", CouriersRowPanel, "Courier");
 		courierPanel.BLoadLayoutSnippet("Courier");
 
 		const courierPortraitRoot = courierPanel.FindChildTraverse("CourierPortraitRoot");
-		courierPortraitRoot.BCreateChildren("<DOTAScenePanel environment='default' particleonly='false' unit='" + courier + "' />");
+		courierPortraitRoot.BCreateChildren("<DOTAScenePanel environment='default' particleonly='false' unit='" + courierName + "' />");
 	
 		const courierRarityLabel = courierPanel.FindChildTraverse("RarityLabel");
-		courierRarityLabel.text = $.Localize("rarity" + rarityMap[courier]);
-		courierRarityLabel.SetHasClass("Rarity" + rarityMap[courier], true);
+		courierRarityLabel.text = $.Localize("rarity" + rarityMap[courierName]);
+		courierRarityLabel.SetHasClass("Rarity" + rarityMap[courierName], true);
 
 		const courierNameLabel = courierPanel.FindChildTraverse("CourierName");
-		courierNameLabel.text = $.Localize(courier);
+		courierNameLabel.text = $.Localize(courierName);
 
 		courierPanel.SetPanelEvent("onactivate", function() { 
-			$.Msg(courierKey);
 			OnCourierSelected(selectionKey, courierKey);
 		});
 	});
 	CourierSelection.visible = true;
 }
 
-function UpdateSelection(selectionData) {
-	const keys = Object.keys(selectionData);
+function UpdateSelection(selections) {
+	const keys = Object.keys(selections);
 	if (keys.length > 0) {
-		ShowCourierSelection(selectionData, keys[0]);
+		ShowCourierSelection(selections[keys[0]], keys[0]);
 	}
 	else
 	{
@@ -50,6 +48,11 @@ function UpdateSelection(selectionData) {
 function OnCourierSelected(selectionKey, courierKey)
 {
 	GameEvents.SendCustomGameEventToServer("couriers:courier_selected", { selection_key: selectionKey, courier_key: courierKey });
+}
+
+function OnRanchoButtonPressed()
+{
+	GameEvents.SendCustomGameEventToServer("couriers:on_rancho_button_pressed", {});
 }
 
 function OnCouriersNetTableChanged(table_name, key, data) {

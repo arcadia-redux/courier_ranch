@@ -4,11 +4,22 @@ require("game/constants")
 require("game/util")
 require("game/maps/dota_mini")
 
+require("game/phases/preparation")
+require("game/phases/casting")
+require("game/phases/bets")
+require("game/phases/fight")
+require("game/phases/post_fight")
+
 CUPS_ARMY_COUNT = 8
 
 CUPS_BRACKETS_QUARTER = 1
 CUPS_BRACKETS_SEMI = 2
 CUPS_BRACKETS_FINAL = 3
+
+CUPS_DUEL_COUNT = {}
+CUPS_DUEL_COUNT[CUPS_BRACKETS_QUARTER] = 4
+CUPS_DUEL_COUNT[CUPS_BRACKETS_SEMI] = 2
+CUPS_DUEL_COUNT[CUPS_BRACKETS_FINAL] = 1
 
 WWW_STATE_PREPARATION = 1
 WWW_STATE_CASTING = 2
@@ -23,6 +34,13 @@ function WWW:Init()
 	ListenToGameEvent('npc_spawned', Dynamic_Wrap(self, "OnHeroSpawned"), self)
 
 	GameRules:GetGameModeEntity():SetExecuteOrderFilter(Dynamic_Wrap(WWW, "OrderFilter"), self)
+
+	self.phases = {}
+	self.phases[WWW_STATE_PREPARATION] = Preparation
+	self.phases[WWW_STATE_CASTING] = Casting
+	self.phases[WWW_STATE_BETS] = Bets
+	self.phases[WWW_STATE_FIGHT] = Fight
+	self.phases[WWW_STATE_POST_FIGHT] = PostFight
 end
 
 function WWW:OrderFilter(event)
@@ -56,21 +74,47 @@ function WWW:CreateCup()
 	-- Optimize table usage
 	CustomNetTables:SetTableValue("cups", "active", cup)
 
-	GetCurrentMap():Init()
-	self:SpawnCurrentCreeps()
+	self:GetCurrentMap():Init()
+end
+
+function WWW:AdvanceCurrentCup()
+	local cup = CustomNetTables:GetTableValue("cups", "active")
+
+	if cup.current.duel == CUPS_DUEL_COUNT[cup.current.bracket] then
+		cup.current.duel = 1
+		cup.current.bracket = cup.current.bracket + 1
+	else
+		cup.current.duel = cup.current.duel + 1
+	end
+
+	CustomNetTables:SetTableValue("cups", "active", cup)
 end
 
 function WWW:MainLoop()
-	self.state = WWW_STATE_PREPARATION
+	self:CreateCup()
+	self:StartPhase(WWW_STATE_PREPARATION)
+end
 
-	WWW:CreateCup()
-
-	Couriers:GrantCourierSelectionToPlayers()
+function WWW:StartPhase(phase_id)
+	local phase = self.phases[phase_id]
+	local timer = phase.TIME
+	CustomNetTables:SetTableValue("cups", "meta", {game_time = timer, phase = phase_id})
+	phase:OnEnter()
+	Timers:CreateTimer(1.0, function()
+		timer = timer - 1
+		CustomNetTables:SetTableValue("cups", "meta", {game_time = timer, phase = phase_id})
+		phase:OnThink()
+		if timer < 0 then
+			phase:OnExit()
+			return nil
+		end
+		return 1.0
+	end)
 end
 
 function WWW:SpawnCurrentCreeps()
 	local creeps_goodguys, creeps_badguys = self:GetCurrentDuelArmies()
-	GetCurrentMap():SpawnCreeps(creeps_goodguys, creeps_badguys)
+	self:GetCurrentMap():SpawnCreeps(creeps_goodguys, creeps_badguys)
 end
 
 function WWW:GetCurrentDuelArmies()
@@ -85,7 +129,7 @@ function WWW:GetCurrentDuelArmies()
 	return armies[tostring(current_duel["1"])], armies[tostring(current_duel["2"])]
 end
 
-function GetCurrentMap()
+function WWW:GetCurrentMap()
 	local cup = CustomNetTables:GetTableValue("cups", "active")
 	return _G[cup.map]
 end

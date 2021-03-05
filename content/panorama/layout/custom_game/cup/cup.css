@@ -16,7 +16,7 @@
 	horizontal-align: center;
 	width: fit-children;
 	height: 150px;
-	margin-top: 42px;
+	margin-top: 37px;
 }
 
 #DetailsButton
@@ -27,6 +27,7 @@
 	height: fit-children;
 	min-width: 0px;
 	min-height: 0px;
+	margin-bottom: -5px;
 }
 
 #Armies
@@ -139,4 +140,14 @@ DOTAScenePanel
 	horizontal-align: right;
 	min-width: 0px;
 	min-height: 0px;
+}
+
+#VS
+{
+	color: white;
+	font-size: 15px;
+	font-weight: semi-bold;
+	vertical-align: center;
+	horizontal-align: center;
+	margin-bottom: 15px;
 }

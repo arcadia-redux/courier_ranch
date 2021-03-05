@@ -1,5 +1,11 @@
 if Armies == nil then Armies = class({}) end
 
+ARMIES_SMALL = 1
+ARMIES_MEDIUM = 2
+ARMIES_LARGE = 3
+
+ARMIES_SPAWN_DELAY = 0.5
+
 function Armies:Init()
 	LinkLuaModifier("creep_aura", "game/modifiers/creep_aura", LUA_MODIFIER_MOTION_NONE)
 
@@ -23,9 +29,8 @@ end
 
 -- Returns spawned creeps
 function Armies:SpawnCreepsAtLocationForTeam(creeps, location, team, creep_spawned_callback)
-	-- 1 is small; 2 is medium; 3 is large
 	for s,creep in pairs(creeps) do
-		local count = tonumber(s)*2
+		local count = (ARMIES_LARGE+1 - tonumber(s)) * 2
 		local i = 1
 		Timers:CreateTimer(function()
 			CreateUnitByNameAsync(creep, location, true, nil, nil, team, function (creep)
@@ -40,7 +45,7 @@ function Armies:SpawnCreepsAtLocationForTeam(creeps, location, team, creep_spawn
 			if i > count then
 				return nil
 			else
-				return 0.35
+				return ARMIES_SPAWN_DELAY
 			end
 		end)
 	end

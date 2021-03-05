@@ -1,0 +1,22 @@
+#GameTime
+{
+	width: 76px;
+	height: 46px;
+
+	vertical-align: top;
+	horizontal-align: center;
+
+	background-image: url("s2r://panorama/images/hud/reborn/bg_timer_psd.vtex");
+	background-size: 100%;
+}
+
+#GameTime Label
+{
+	text-align: center;
+	font-size: 25px;
+	font-weight: semi-bold;
+	color: white;
+	vertical-align: center;
+	horizontal-align: center;
+	margin-bottom: 4px;
+}

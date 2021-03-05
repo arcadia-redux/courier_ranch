@@ -45,3 +45,18 @@ function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
 		end)
 	end
 end
+
+function DotaMini:ReleaseCreeps()
+	for _,v in pairs(self.spawned_creeps) do
+		v:RemoveModifierByName("modifier_rooted")
+	end
+end
+
+function DotaMini:RemoveAllCreeps()
+	for _,v in pairs(self.spawned_creeps) do
+		if IsValidEntity(v) then
+			UTIL_Remove(v)
+		end
+	end
+	self.spawned_creeps = {}
+end

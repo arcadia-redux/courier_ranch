@@ -30,6 +30,7 @@
 			<Button id="DetailsButton" class="ButtonBevel" onactivate="OnDetailsButtonPressed()">
 				<Label text="DETAILS" />
 			</Button>
+			<Label id="VS" text="vs" />
 		</Panel>
 		<Panel id="Cup">
 			<Panel id="CloseButton" class="ButtonBevel" onactivate="OnCloseButtonPressed()" hittest="true">

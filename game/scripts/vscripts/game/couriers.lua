@@ -35,6 +35,11 @@ function Couriers:Init()
 		self:OnPlayerPressedRanchoButton(data)
 	end)
 
+	-- Couriers player table
+	-- "selections" lists all available courier selections to a player, in groups of three entindices
+	-- selections = {randomKeyString1 = {1 = courier_entindex1, 2 = courier_entindex2, 3 = courier_entindex3}}
+	-- "rancho" lists courier entindices at rancho while "active" lists couriers running around the player at battlefield
+	-- rancho = {courier_entindex1=1,courier_entindex2=1,courier_entindex3=1,etc...}
 	for player_id=0,WWW_MAX_PLAYERS-1 do
 		PlayerTables:CreateTable(self:GetCouriersPlayerTableName(player_id), {rancho={},active={},selections={}}, {player_id})
 	end
@@ -94,7 +99,7 @@ function Couriers:OnPlayerSelectedCourier(data)
 
 	if type(selection) == "table" then
 		local courier_data = selection[courier_key]
-		local courier = EntIndexToHScript(courier_data["courier_entindex"])
+		local courier = EntIndexToHScript(courier_data)
 
 		if IsValidEntity(courier) then
 			PlayerTables:SetSubTableKeyValuePair(table_name, "selections", selection_key, nil)
@@ -161,7 +166,7 @@ function Couriers:GrantCourierSelectionToPlayer(player_id)
 	local couriers = self:GetRandomCouriersFromPlayerRancho(player_id, COURIERS_SELECTION_AMOUNT)
 	local new_selection = {}
 	for _,v in pairs(couriers) do
-		table.insert(new_selection, {courier_entindex=v})
+		table.insert(new_selection, v)
 	end
 
 	local table_name = self:GetCouriersPlayerTableName(player_id)

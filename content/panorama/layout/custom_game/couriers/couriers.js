@@ -13,7 +13,7 @@ function ShowCourierSelection(couriers, selectionKey) {
 	CouriersRowPanel.RemoveAndDeleteChildren();
 	Object.keys(couriers).forEach(key => {
 		const courierKey = key;
-		const courierName = Entities.GetUnitName(couriers[courierKey]["courier_entindex"]);
+		const courierName = Entities.GetUnitName(couriers[courierKey]);
 		const courierPanel = $.CreatePanel("Panel", CouriersRowPanel, "Courier");
 		courierPanel.BLoadLayoutSnippet("Courier");
 

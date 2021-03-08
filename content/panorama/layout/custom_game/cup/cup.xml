@@ -21,9 +21,9 @@
 		<Panel id="CupStatus">
 			<Panel class="ArmyRow">
 				<Panel class="ArmyDuel">
-					<Panel class="ArmySlot" id="StatusSlot0">
+					<Panel class="ArmySlot StatusSlot" id="StatusSlot0">
 					</Panel>
-					<Panel class="ArmySlot" id="StatusSlot1">
+					<Panel class="ArmySlot StatusSlot" id="StatusSlot1">
 					</Panel>
 				</Panel>
 			</Panel>

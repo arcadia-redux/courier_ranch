@@ -16,7 +16,17 @@
 	font-size: 25px;
 	font-weight: semi-bold;
 	color: white;
-	vertical-align: center;
+	vertical-align: top;
 	horizontal-align: center;
-	margin-bottom: 4px;
+	margin-top: 2px;
+}
+
+#PhaseLabel
+{
+	font-size: 14px;
+	font-weight: semi-bold;
+	color: white;
+	vertical-align: top;
+	horizontal-align: center;
+	margin-top: 26px;
 }

@@ -24,7 +24,6 @@ function Couriers:Init()
 		rancho["center_unit"] = CreateTargetDummyUnit(center_unit_location)
 		rancho["min"] = min
 		rancho["max"] = max
-		rancho["couriers"] = {}
 		self["Ranchos"][i] = rancho
 	end
 
@@ -35,6 +34,14 @@ function Couriers:Init()
 	CustomGameEventManager:RegisterListener("couriers:on_rancho_button_pressed", function (_, data)
 		self:OnPlayerPressedRanchoButton(data)
 	end)
+
+	for player_id=0,WWW_MAX_PLAYERS-1 do
+		PlayerTables:CreateTable(self:GetCouriersPlayerTableName(player_id), {rancho={},active={},selections={}}, {player_id})
+	end
+end
+
+function Couriers:GetCouriersPlayerTableName(player_id)
+	return "couriers_player"..tostring(player_id)
 end
 
 function Couriers:FillEmptyRanchos()
@@ -81,36 +88,45 @@ function Couriers:OnPlayerSelectedCourier(data)
 	local courier_key = data.courier_key
 	local selection_key = data.selection_key
 
-	local selection = CustomNetTables:GetTableValue("couriers", "selection")
+	local table_name = self:GetCouriersPlayerTableName(player_id)
+	local selections = PlayerTables:GetTableValue(table_name, "selections")
+	local selection = selections[selection_key]
 
-	local player_selection = selection[tostring(player_id)]
-
-	if type(player_selection) == "table" then
-		local courier_data = player_selection[selection_key][courier_key]
+	if type(selection) == "table" then
+		local courier_data = selection[courier_key]
 		local courier = EntIndexToHScript(courier_data["courier_entindex"])
 
 		if IsValidEntity(courier) then
-			table.remove_item(self["Ranchos"][player_id]["couriers"], courier)
-			Timers:RemoveTimer(courier.roam_timer)
-			courier:Stop()
-			courier.courier_modifier.start_time = GameRules:GetGameTime()
-			courier.courier_modifier.hero_owner = PlayerResource:GetPlayer(player_id):GetAssignedHero()
-			courier.courier_modifier:StartIntervalThink(0)
-			courier:StartGesture(ACT_DOTA_RUN)
+			PlayerTables:SetSubTableKeyValuePair(table_name, "selections", selection_key, nil)
 
-			-- Update nettable
-			selection[tostring(player_id)][selection_key] = nil
-			CustomNetTables:SetTableValue("couriers", "selection", selection)
+			self:ActivateRanchoCourier(player_id, courier)
 		end
 	end
+end
+
+function Couriers:ActivateRanchoCourier(player_id, courier)
+	local table_name = self:GetCouriersPlayerTableName(player_id)
+
+	PlayerTables:SetSubTableKeyValuePair(table_name, "rancho", courier:entindex(), nil)
+	PlayerTables:SetSubTableKeyValuePair(table_name, "active", courier:entindex(), true)
+
+	Timers:RemoveTimer(courier.roam_timer)
+	courier:Stop()
+	courier.courier_modifier.start_time = GameRules:GetGameTime()
+	courier.courier_modifier.hero_owner = PlayerResource:GetPlayer(player_id):GetAssignedHero()
+	courier.courier_modifier:StartIntervalThink(0)
+	courier:StartGesture(ACT_DOTA_RUN)
 end
 
 function Couriers:AddCourierToPlayerRancho(player_id, courier_name)
 	local courier = CreateUnitByName(courier_name, self:GetRandomPositionInsideRancho(player_id), true, nil, nil, PlayerResource:GetTeam(player_id))
 	courier:SetControllableByPlayer(player_id, true)
 	courier.courier_modifier = courier:AddNewModifier(courier, nil, "courier_aura", {})
-	table.insert(self["Ranchos"][player_id]["couriers"], courier)
 	self:BasicRoamAI(courier, player_id)
+
+	local table_name = self:GetCouriersPlayerTableName(player_id)
+	PlayerTables:SetSubTableKeyValuePair(table_name, "rancho", courier:entindex(), true)
+
 	return courier
 end
 
@@ -134,23 +150,29 @@ function Couriers:BuildRarityMap()
 end
 
 function Couriers:GrantCourierSelectionToPlayers()
-	local selection = CustomNetTables:GetTableValue("couriers", "selection") or {}
+	for player_id=0,WWW_MAX_PLAYERS-1 do
+		self:GrantCourierSelectionToPlayer(player_id)
+	end
+end
 
-	for player_id=0,7 do
-		selection[player_id] = selection[player_id] or {}
-		local couriers = self:GetRandomCouriersFromPlayerRancho(player_id, COURIERS_SELECTION_AMOUNT)
-		local current_selection = {}
-		for _,v in pairs(couriers) do
-			table.insert(current_selection, {courier_entindex=v:entindex(), courier_name=v:GetUnitName()})
-		end
-		table.insert(selection[player_id], current_selection)
+function Couriers:GrantCourierSelectionToPlayer(player_id)
+	-- @TODO
+	-- Take already present selections into account
+	local couriers = self:GetRandomCouriersFromPlayerRancho(player_id, COURIERS_SELECTION_AMOUNT)
+	local new_selection = {}
+	for _,v in pairs(couriers) do
+		table.insert(new_selection, {courier_entindex=v})
 	end
 
-	CustomNetTables:SetTableValue("couriers", "selection", selection)
+	local table_name = self:GetCouriersPlayerTableName(player_id)
+	PlayerTables:SetSubTableKeyValuePair(table_name, "selections", DoUniqueString(table_name), new_selection)
 end
 
 function Couriers:GetRandomCouriersFromPlayerRancho(player_id, amount)
-	return table.random_some(self["Ranchos"][player_id]["couriers"], amount)
+	local table_name = self:GetCouriersPlayerTableName(player_id)
+	local rancho_couriers = PlayerTables:GetTableValue(table_name, "rancho")
+	
+	return table.random_some(table.make_key_table(rancho_couriers), amount)
 end
 
 function Couriers:BasicRoamAI(courier, player_id)

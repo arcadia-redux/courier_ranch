@@ -105,6 +105,18 @@
 	background-color: rgba(0, 0, 0, 0.336);
 }
 
+.ArmySlot.Winner
+{
+	border: 2px solid rgb(29, 253, 115);
+	padding: -2px;
+}
+
+.ArmySlot.StatusSlot
+{
+	margin-left: 12px;
+	margin-right: 12px;
+}
+
 #UnitName
 {
 	text-align: center;

@@ -11,3 +11,11 @@ function UnitLookAtPoint(unit, point)
 	if dir == Vector(0,0,0) then return unit:GetForwardVector() end
 	return dir
 end
+
+function ExtractEntityIndices(ents)
+	local t = {}
+	for _,v in pairs(ents) do
+		table.insert(t, v:entindex())
+	end
+	return t
+end

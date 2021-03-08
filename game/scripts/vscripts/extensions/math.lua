@@ -7,3 +7,7 @@ function math.random_point_inside_circle(origin, radius, min_length)
 
 	return origin + Vector(x_offset, y_offset, 0)
 end
+
+function math.repeat_value(val, upper)
+	return val - math.floor(val / upper) * upper
+end

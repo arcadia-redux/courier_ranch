@@ -12,5 +12,6 @@
 		<Panel id="GameTime">
 			<Label id="GameTimeLabel" text="0" />
 		</Panel>
+		<Label id="PhaseLabel" text="Preparation" />
 	</Panel>
 </root>

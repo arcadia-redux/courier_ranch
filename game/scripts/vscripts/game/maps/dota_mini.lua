@@ -13,6 +13,8 @@ function DotaMini:Init()
 	self.waypoints_top = ExtractWaypointsLocations("dota_mini_waypoint_*_top")
 	self.waypoints_bottom = ExtractWaypointsLocations("dota_mini_waypoint_*_bottom")
 
+	self.buildings = Entities:FindAllByName("dota_mini_building")
+
 	self.spawned_creeps = {}
 end
 
@@ -47,16 +49,58 @@ function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
 end
 
 function DotaMini:ReleaseCreeps()
-	for _,v in pairs(self.spawned_creeps) do
-		v:RemoveModifierByName("modifier_rooted")
+	for _,creep in pairs(self.spawned_creeps) do
+		creep:RemoveModifierByName("modifier_rooted")
 	end
 end
 
 function DotaMini:RemoveAllCreeps()
-	for _,v in pairs(self.spawned_creeps) do
-		if IsValidEntity(v) then
-			UTIL_Remove(v)
+	for _,creep in pairs(self.spawned_creeps) do
+		if IsValidEntity(creep) then
+			UTIL_Remove(creep)
 		end
 	end
 	self.spawned_creeps = {}
+end
+
+function DotaMini:StopAllCreepsAndPlayVictoryGesture(team)
+	for _,creep in pairs(self.spawned_creeps) do
+		if IsValidEntity(creep) then
+			if creep.waypoint_ai_timer then
+				Timers:RemoveTimer(creep.waypoint_ai_timer)
+			end
+			creep:AddNewModifier( creep, nil, "modifier_disarmed", {} )
+			creep:Stop()
+			if creep:GetTeam() == team then
+				creep:StartGesture(ACT_DOTA_VICTORY)
+			end
+		end
+	end
+end
+
+function DotaMini:GetTeamWithMostCreeps()
+	local teams = {}
+	teams[DOTA_TEAM_GOODGUYS] = 0
+	teams[DOTA_TEAM_BADGUYS] = 0
+
+	for _,creep in pairs(self.spawned_creeps) do
+		if IsValidEntity(creep) and creep:IsAlive() then
+			teams[creep:GetTeam()] = teams[creep:GetTeam()] + 1
+		end
+	end
+	if teams[DOTA_TEAM_GOODGUYS] > teams[DOTA_TEAM_BADGUYS] then
+		return DOTA_TEAM_GOODGUYS
+	elseif teams[DOTA_TEAM_GOODGUYS] < teams[DOTA_TEAM_BADGUYS] then
+		return DOTA_TEAM_BADGUYS
+	else
+		return DOTA_TEAM_NOTEAM
+	end
+end
+
+function DotaMini:RespawnBuildings()
+	for _,building in pairs(self.buildings) do
+		if building:IsAlive() == false then
+			building:RespawnUnit()
+		end
+	end
 end

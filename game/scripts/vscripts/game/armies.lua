@@ -54,9 +54,9 @@ end
 function Armies:StartBasicWaypointAI(creep, waypoints, reverse)
 	local number_of_waypoints = table.getn(waypoints)
 
-	local current_waypoint = 1
+	local current_waypoint = 2
 	if reverse then
-		current_waypoint = number_of_waypoints
+		current_waypoint = number_of_waypoints - 1
 	end
 
 	function NextWaypoint()
@@ -67,7 +67,7 @@ function Armies:StartBasicWaypointAI(creep, waypoints, reverse)
 		end
 	end
 
-	Timers:CreateTimer(function()
+	creep.waypoint_ai_timer = Timers:CreateTimer(function()
 		if IsValidEntity(creep) == false then
 			return nil
 		end

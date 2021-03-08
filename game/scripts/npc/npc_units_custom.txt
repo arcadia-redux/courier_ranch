@@ -59,16 +59,18 @@
 		"BaseClass"					"npc_dota_creature"
 	}
 
-	"npc_dota_badguys_tower1_bot"
+	"npc_dota_badguys_tower"
 	{
-		"StatusHealth"				"50"
-		"AttackCapabilities"		"DOTA_UNIT_CAP_NO_ATTACK"
+		"BaseClass"                 "npc_dota_badguys_tower1_bot"
+		"Model"                     "models/props_structures/rock_golem/tower_dire_rock_golem.vmdl"
+		"ProjectileModel"           "particles/econ/events/ti9/rock_golem_tower/dire_tower_attack.vpcf"
 	}
 
-	"npc_dota_goodguys_tower1_bot"
+	"npc_dota_goodguys_tower"
 	{
-		"StatusHealth"				"50"
-		"AttackCapabilities"		"DOTA_UNIT_CAP_NO_ATTACK"
+		"BaseClass"                 "npc_dota_goodguys_tower1_bot"
+		"Model"                     "models/props_structures/rock_golem/tower_radiant_rock_golem.vmdl" // models/props_structures/rock_golem/tower_dire_rock_golem.vmdl
+		"ProjectileModel"           "particles/econ/events/ti9/rock_golem_tower/radiant_tower_attack.vpcf" // particles/econ/events/ti9/rock_golem_tower/dire_tower_attack.vpcf
 	}
 
 	"npc_dota_badguys_fort"
@@ -76,7 +78,7 @@
 		"BaseClass"					"npc_dota_building"
 		"Model"						"models/props_structures/dire_ancient_base001.vmdl"
 		"ModelScale" 				".8"
-		"StatusHealth"				"50"
+		"StatusHealth"				"150"
 		"StatusHealthRegen"			"0"
 		"Ability1"					""
 		"vscripts"					"game/unit_scripts/remove_modifiers"
@@ -87,7 +89,7 @@
 		"BaseClass"					"npc_dota_building"
 		"Model"						"models/props_structures/radiant_ancient001.vmdl"
 		"ModelScale" 				".8"
-		"StatusHealth"				"50"
+		"StatusHealth"				"150"
 		"StatusHealthRegen"			"0"
 		"Ability1"					""
 		"vscripts"					"game/unit_scripts/remove_modifiers"

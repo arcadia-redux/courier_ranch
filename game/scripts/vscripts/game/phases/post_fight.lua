@@ -1,6 +1,6 @@
 if PostFight == nil then PostFight = class({}) end
 
-PostFight.TIME = 10
+PostFight.TIME = 5
 
 function PostFight:OnEnter()
 end

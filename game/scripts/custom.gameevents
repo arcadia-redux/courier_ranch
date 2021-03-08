@@ -1,0 +1,7 @@
+"CustomEvents"
+{
+	"fort_destroyed"
+	{
+		"won_team" "short"
+	}
+}

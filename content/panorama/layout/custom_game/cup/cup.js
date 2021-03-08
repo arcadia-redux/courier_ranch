@@ -4,8 +4,19 @@ const CUPS_BRACKETS_FINAL = 3;
 
 const CupPanel = $("#Cup");
 const BracketsPanel = $("#Brackets");
+const WinnerSlotPanel = $("#WinnerSlot");
 
 function UpdateCupPanel(cup) {
+	let current = cup["current"];
+	let currentArmyDuelPanelID = "ArmyDuel" + current["bracket"] + current["duel"];
+	BracketsPanel.FindChildrenWithClassTraverse("ArmyDuel").forEach(function (panel) {
+		panel.Children().forEach(function (panel) {
+			panel.RemoveAndDeleteChildren();
+			panel.SetHasClass("Winner", false);
+		});
+		panel.SetHasClass("Current", panel.id == currentArmyDuelPanelID);
+	});
+
 	const armies = cup["armies"];
 	const brackets = cup["brackets"];
 	for (let i = CUPS_BRACKETS_QUARTER; i < CUPS_BRACKETS_FINAL + 1; i++) {
@@ -14,19 +25,26 @@ function UpdateCupPanel(cup) {
 			for (var duelKey in duels) {
 				const duel = duels[duelKey];
 				for (var armyKey in duel) {
-					FillArmySlot($("#ArmySlot" + i + duelKey + armyKey), armies[duel[armyKey]]);
-				}	
+					if (armyKey != "winner")
+					{
+						const armySlotPanel = $("#ArmySlot" + i + duelKey + armyKey);
+						FillArmySlot(armySlotPanel, armies[duel[armyKey]], duel["winner"] == armyKey);
+					}
+				}
 			}
 		}
 	}
-	BracketsPanel.FindChildrenWithClassTraverse("ArmyDuel").forEach(function(panel) {
-		panel.SetHasClass("Current", false);
-	});
-	let current = cup["current"];
-	$("#ArmyDuel"+current["bracket"]+current["duel"]).AddClass("Current");
+
+	if (cup["winner"]) {
+		FillArmySlot(WinnerSlotPanel, armies[cup["winner"]], true)
+	}
+	else {
+		WinnerSlotPanel.RemoveAndDeleteChildren();
+	}
 }
 
-function FillArmySlot(armySlotPanel, army) {
+function FillArmySlot(armySlotPanel, army, isWinner) {
+	armySlotPanel.SetHasClass("Winner", isWinner);
 	armySlotPanel.RemoveAndDeleteChildren();
 	let armyPanel = $.CreatePanel("Panel", armySlotPanel, "Army");
 	armyPanel.BLoadLayoutSnippet("Army");
@@ -42,8 +60,8 @@ function UpdateCupPreviewPanel(cup) {
 	let currentDuel = current["duel"];
 	let currentBracket = current["bracket"];
 	let armies = cup["brackets"][currentBracket][currentDuel];
-	FillArmySlot($("#StatusSlot0"), cup["armies"][armies["1"]]);
-	FillArmySlot($("#StatusSlot1"), cup["armies"][armies["2"]]);
+	FillArmySlot($("#StatusSlot0"), cup["armies"][armies["1"]], armies["winner"] == "1");
+	FillArmySlot($("#StatusSlot1"), cup["armies"][armies["2"]], armies["winner"] == "2");
 }
 
 function OnCupsNetTableChanged(table_name, key, data) {

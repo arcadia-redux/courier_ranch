@@ -1,6 +1,7 @@
 _G.GameMode = GameMode or {}
 
 require("libraries/timers")
+require("libraries/playertables")
 
 require("extensions/init")
 
@@ -35,7 +36,9 @@ function GameMode:InitGameMode()
 
 	game_mode_entity:SetCustomGameForceHero("npc_dota_hero_wisp")
 	game_mode_entity:SetFogOfWarDisabled(true)
+	game_mode_entity:SetTowerBackdoorProtectionEnabled(false)
 
+	Couriers:Init()
 	Armies:Init()
 	WWW:Init()
 
@@ -45,7 +48,6 @@ end
 function GameMode:OnGameRulesStateChange()
 	local state = GameRules:State_Get()
 	if state == DOTA_GAMERULES_STATE_CUSTOM_GAME_SETUP then
-		Couriers:Init()
 		GameMode:OnEnteredCustomGameSetup()
 	elseif state == DOTA_GAMERULES_STATE_HERO_SELECTION then
 	elseif state == DOTA_GAMERULES_STATE_PRE_GAME then

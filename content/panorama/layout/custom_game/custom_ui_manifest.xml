@@ -1,7 +1,25 @@
 <root>
 	<scripts>
+		<include src="file://{resources}/scripts/playertables/playertables_base.js"/>
 	</scripts>
 	<script>
+		function HidePickScreen() {
+			var dotaHud = $.GetContextPanel().GetParent().GetParent();
+			if (Game.GameStateIsBefore(DOTA_GameState.DOTA_GAMERULES_STATE_HERO_SELECTION)) {
+				dotaHud.FindChild("PreGame").visible = false;
+			}
+			else if (Game.GameStateIs(DOTA_GameState.DOTA_GAMERULES_STATE_HERO_SELECTION)) {
+				dotaHud.FindChild("PreGame").visible = true;
+			}
+			else if (Game.GameStateIs(DOTA_GameState.DOTA_GAMERULES_STATE_PRE_GAME)) {
+				dotaHud.FindChild("PreGame").visible = false;
+			}
+		}
+		(function()
+		{
+			GameEvents.Subscribe( "game_rules_state_change", HidePickScreen );
+		})();
+
 		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_FLYOUT_SCOREBOARD, false );
 		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_HEROES, false );
 		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_SHOP_SUGGESTEDITEMS, false );
@@ -14,8 +32,9 @@
 		GameUI.SetDefaultUIEnabled( DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_SHOP, false );
     </script>
 	<Panel>
-		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hud/hud.xml"/>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/cup/cup.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hud/hud.xml"/>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/couriers/couriers.xml"/>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/debug/debug.xml"/>
 	</Panel>
 </root>

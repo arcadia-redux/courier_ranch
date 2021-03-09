@@ -78,9 +78,11 @@ function Couriers:OrderFilter(event)
 	end
 
 	if any_couriers then
-		if event.order_type == DOTA_UNIT_ORDER_CAST_NO_TARGET then
+		if event.order_type == DOTA_UNIT_ORDER_CAST_POSITION or event.order_type == DOTA_UNIT_ORDER_CAST_TARGET then
+			print(event.order_type)
 			return true
 		else
+			print(event.order_type)
 			return false
 		end
 	end

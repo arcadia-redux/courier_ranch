@@ -1,8 +1,0 @@
-"DOTAAbilities"
-{
-	"courier_venom_strike"
-	{
-		"BaseClass" "ability_lua"
-		"ScriptFile" "game/courier_abilities/venom_strike/courier_venom_strike"
-	}
-}

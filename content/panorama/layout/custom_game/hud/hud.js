@@ -11,5 +11,5 @@ function OnCupsNetTableChanged(table_name, key, data) {
 }
 
 (function () {
-	HookAndFire("cups", OnCupsNetTableChanged);
+	HookAndFire("www", OnCupsNetTableChanged);
 })();

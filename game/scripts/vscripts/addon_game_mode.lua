@@ -17,9 +17,21 @@ function Precache( context )
 			PrecacheResource( "particle", "*.vpcf", context )
 			PrecacheResource( "particle_folder", "particles/folder", context )
 	]]
+
+	PrecacheResource( "particle", "particles/courier_mark.vpcf", context )
 end
 
 function Activate()
+	RegisterCustomAnimationScriptForModel(
+		"models/props_structures/rock_golem/tower_radiant_rock_golem.vmdl",
+		"animation/props_structures/rock_golem/tower_radiant_rock_golem.lua"
+	)
+
+	RegisterCustomAnimationScriptForModel(
+		"models/props_structures/rock_golem/tower_dire_rock_golem.vmdl",
+		"animation/props_structures/rock_golem/tower_radiant_rock_golem.lua"
+	)
+
 	GameMode:InitGameMode()
 end
 

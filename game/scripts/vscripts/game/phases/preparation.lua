@@ -6,7 +6,7 @@ function Preparation:OnEnter()
 	WWW:GetCurrentMap():RespawnBuildings()
 	WWW:SpawnCurrentCreeps()
 	Couriers:GrantCourierSelectionToPlayers()
-	Couriers:GrantCourierSelectionToPlayers()
+	-- Couriers:GrantCourierSelectionToPlayers()
 end
 
 function Preparation:OnThink()

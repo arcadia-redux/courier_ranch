@@ -49,7 +49,7 @@ function WWW:Init()
 	self.phases[WWW_STATE_FIGHT] = Fight
 	self.phases[WWW_STATE_POST_FIGHT] = PostFight
 
-	PlayerTables:CreateTable("cups", {rancho={},active={},selections={}}, true)
+	PlayerTables:CreateTable("cup", {}, true)
 end
 
 function WWW:OrderFilter(event)
@@ -65,11 +65,13 @@ end
 
 function WWW:OnEntityKilled(keys)
 	local killed_unit = EntIndexToHScript(keys.entindex_killed)
-	local attacker = EntIndexToHScript(keys.entindex_attacker)
 
-	if killed_unit and (string.match(killed_unit:GetUnitName(), "npc_dota_badguys_fort") or string.match(killed_unit:GetUnitName(), "npc_dota_goodguys_fort")) then
-		local won_team = attacker:GetTeam()
-		FireGameEventLocal("fort_destroyed", {won_team=won_team})
+	if killed_unit and killed_unit:IsBuilding() then
+		if string.match(killed_unit:GetUnitName(), "npc_dota_badguys_fort")
+		or string.match(killed_unit:GetUnitName(), "npc_dota_goodguys_fort") then
+			local won_team = EntIndexToHScript(keys.entindex_attacker):GetTeam()
+			FireGameEventLocal("fort_destroyed", {won_team=won_team})
+		end
 	end
 end
 
@@ -91,32 +93,32 @@ function WWW:CreateCup()
 
 	-- @TODO
 	-- Optimize table usage
-	CustomNetTables:SetTableValue("cups", "active", cup)
+	PlayerTables:SetTableValues("cup", cup)
 
 	self:GetCurrentMap():Init()
 end
 
 function WWW:RecordWin(team)
-	local cup = CustomNetTables:GetTableValue("cups", "active")
+	local cup = PlayerTables:GetAllTableValues("cup")
 	
 	-- Record winners
-	cup.brackets[tostring(cup.current.bracket)][tostring(cup.current.duel)]["winner"] = tostring(team-1)
+	cup.brackets[cup.current.bracket][cup.current.duel]["winner"] = team-1
 	
 	-- Update next brackets
-	local current_army = cup.brackets[tostring(cup.current.bracket)][tostring(cup.current.duel)][tostring(team-1)]
-	if tonumber(cup.current.bracket) == CUPS_BRACKETS_FINAL then
+	local current_army = cup.brackets[cup.current.bracket][cup.current.duel][team-1]
+	if cup.current.bracket == CUPS_BRACKETS_FINAL then
 		cup.winner = current_army
 	else
-		local next_duel_id = tostring(math.floor((tonumber(cup.current.duel) / 2)+0.5))
-		cup.brackets[tostring(cup.current.bracket+1)][tostring(next_duel_id)] = cup.brackets[tostring(cup.current.bracket+1)][tostring(next_duel_id)] or {}
-		cup.brackets[tostring(cup.current.bracket+1)][tostring(next_duel_id)][tostring(math.repeat_value(tonumber(cup.current.duel)-1,2)+1)] = current_army
+		local next_duel_id = math.floor((cup.current.duel / 2)+0.5)
+		cup.brackets[cup.current.bracket+1][next_duel_id] = cup.brackets[cup.current.bracket+1][next_duel_id] or {}
+		cup.brackets[cup.current.bracket+1][next_duel_id][math.repeat_value(tonumber(cup.current.duel)-1,2)+1] = current_army
 	end
 
-	CustomNetTables:SetTableValue("cups", "active", cup)
+	PlayerTables:SetTableValues("cup", cup)
 end
 
 function WWW:AdvanceCurrentCup()
-	local cup = CustomNetTables:GetTableValue("cups", "active")
+	local cup = PlayerTables:GetAllTableValues("cup")
 
 	if cup.current.bracket == CUPS_BRACKETS_FINAL then
 		WWW:CreateCup()
@@ -128,7 +130,7 @@ function WWW:AdvanceCurrentCup()
 			cup.current.duel = cup.current.duel + 1
 		end
 	
-		CustomNetTables:SetTableValue("cups", "active", cup)
+		PlayerTables:SetTableValues("cup", cup)
 	end
 end
 
@@ -145,11 +147,11 @@ end
 function WWW:StartPhase(phase_id)
 	self.current_phase = self.phases[phase_id]
 	local game_time = self.current_phase.TIME
-	CustomNetTables:SetTableValue("cups", "meta", {game_time = game_time, phase_id = phase_id})
+	CustomNetTables:SetTableValue("www", "meta", {game_time = game_time, phase_id = phase_id})
 	self.current_phase:OnEnter()
 	self.phase_timer = Timers:CreateTimer(1.0, function()
 		game_time = game_time - 1
-		CustomNetTables:SetTableValue("cups", "meta", {game_time = game_time, phase_id = phase_id})
+		CustomNetTables:SetTableValue("www", "meta", {game_time = game_time, phase_id = phase_id})
 		self.current_phase:OnThink()
 		if game_time < 0 then
 			self.current_phase:OnExit()
@@ -165,18 +167,17 @@ function WWW:SpawnCurrentCreeps()
 end
 
 function WWW:GetCurrentDuelArmies()
-	local cup = CustomNetTables:GetTableValue("cups", "active")
+	local cup = PlayerTables:GetAllTableValues("cup")
 
 	local armies = cup.armies
 	local brackets = cup.brackets
 
-	local current_bracket = brackets[tostring(cup.current.bracket)]
-	local current_duel = current_bracket[tostring(cup.current.duel)]
+	local current_bracket = brackets[cup.current.bracket]
+	local current_duel = current_bracket[cup.current.duel]
 
-	return armies[tostring(current_duel["1"])], armies[tostring(current_duel["2"])]
+	return armies[current_duel[1]], armies[current_duel[2]]
 end
 
 function WWW:GetCurrentMap()
-	local cup = CustomNetTables:GetTableValue("cups", "active")
-	return _G[cup.map]
+	return _G[PlayerTables:GetTableValue("cup", "map")]
 end

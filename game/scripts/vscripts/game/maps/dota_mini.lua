@@ -4,6 +4,7 @@ if DotaMini == nil then
 	DotaMini = NewMap()
 	DotaMini.spawn_locations_goodguys_name = "dota_mini_goodguys_spawn"
 	DotaMini.spawn_locations_badguys_name = "dota_mini_badguys_spawn"
+	DotaMini.building_name = "dota_mini_building"
 end
 
 function DotaMini:Init()
@@ -13,7 +14,16 @@ function DotaMini:Init()
 	self.waypoints_top = ExtractWaypointsLocations("dota_mini_waypoint_*_top")
 	self.waypoints_bottom = ExtractWaypointsLocations("dota_mini_waypoint_*_bottom")
 
-	self.buildings = Entities:FindAllByName("dota_mini_building")
+	self.buildings = Entities:FindAllByName(self.building_name)
+	for key,building in pairs(self.buildings) do 
+		local building_table = {}
+		building_table["unit"] = building
+		building_table["origin"] = building:GetAbsOrigin()
+		building_table["unit_name"] = building:GetUnitName()
+		building_table["team"] = building:GetTeam()
+
+		self.buildings[key] = building_table
+	end
 
 	self.spawned_creeps = {}
 end
@@ -98,9 +108,12 @@ function DotaMini:GetTeamWithMostCreeps()
 end
 
 function DotaMini:RespawnBuildings()
-	for _,building in pairs(self.buildings) do
-		if building:IsAlive() == false then
-			building:RespawnUnit()
+	for key,building_table in pairs(self.buildings) do
+		if IsValidEntity(building_table.unit) == false then
+			self.buildings[key].unit = CreateUnitByName(building_table.unit_name, building_table.origin, false, nil, nil, building_table.team)
+		elseif building_table.unit:IsAlive() == false then
+			building_table.unit:RespawnUnit()
+		else
 		end
 	end
 end

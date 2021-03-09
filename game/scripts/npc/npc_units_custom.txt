@@ -1,4 +1,4 @@
-#base "couriers/couriers.txt"
+#base "couriers/units.txt"
 
 "DOTAUnits"
 {
@@ -61,16 +61,40 @@
 
 	"npc_dota_badguys_tower"
 	{
-		"BaseClass"                 "npc_dota_badguys_tower1_bot"
+		"BaseClass"                 "npc_dota_creature"
 		"Model"                     "models/props_structures/rock_golem/tower_dire_rock_golem.vmdl"
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_NONE"
+		"StatusHealth"				"150"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
+		"AttackDamageMin"			"18"
+		"AttackDamageMax"			"22"
+		"AttackDamageType"			"DAMAGE_TYPE_ArmorPhysical"
+		"BaseAttackSpeed"			"110"
+		"AttackRate"				"0.9"
+		"AttackAnimationPoint"		"0.6"
+		"AttackAcquisitionRange"	"700"
+		"AttackRange"				"700"
 		"ProjectileModel"           "particles/econ/events/ti9/rock_golem_tower/dire_tower_attack.vpcf"
+		"ProjectileSpeed"			"750"
 	}
 
 	"npc_dota_goodguys_tower"
 	{
-		"BaseClass"                 "npc_dota_goodguys_tower1_bot"
+		"BaseClass"                 "npc_dota_creature"
 		"Model"                     "models/props_structures/rock_golem/tower_radiant_rock_golem.vmdl" // models/props_structures/rock_golem/tower_dire_rock_golem.vmdl
-		"ProjectileModel"           "particles/econ/events/ti9/rock_golem_tower/radiant_tower_attack.vpcf" // particles/econ/events/ti9/rock_golem_tower/dire_tower_attack.vpcf
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_NONE"
+		"StatusHealth"				"150"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
+		"AttackDamageMin"			"18"
+		"AttackDamageMax"			"22"
+		"AttackDamageType"			"DAMAGE_TYPE_ArmorPhysical"
+		"BaseAttackSpeed"			"110"
+		"AttackRate"				"0.9"
+		"AttackAnimationPoint"		"0.6"
+		"AttackAcquisitionRange"	"700"
+		"AttackRange"				"700"
+		"ProjectileModel"           "particles/econ/events/ti9/rock_golem_tower/radiant_tower_attack.vpcf"
+		"ProjectileSpeed"			"750"
 	}
 
 	"npc_dota_badguys_fort"
@@ -78,7 +102,7 @@
 		"BaseClass"					"npc_dota_building"
 		"Model"						"models/props_structures/dire_ancient_base001.vmdl"
 		"ModelScale" 				".8"
-		"StatusHealth"				"150"
+		"StatusHealth"				"250"
 		"StatusHealthRegen"			"0"
 		"Ability1"					""
 		"vscripts"					"game/unit_scripts/remove_modifiers"
@@ -89,7 +113,7 @@
 		"BaseClass"					"npc_dota_building"
 		"Model"						"models/props_structures/radiant_ancient001.vmdl"
 		"ModelScale" 				".8"
-		"StatusHealth"				"150"
+		"StatusHealth"				"250"
 		"StatusHealthRegen"			"0"
 		"Ability1"					""
 		"vscripts"					"game/unit_scripts/remove_modifiers"

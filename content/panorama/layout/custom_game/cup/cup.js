@@ -64,10 +64,13 @@ function UpdateCupPreviewPanel(cup) {
 	FillArmySlot($("#StatusSlot1"), cup["armies"][armies["2"]], armies["winner"] == "2");
 }
 
-function OnCupsNetTableChanged(table_name, key, data) {
-	if (key == "active") {
-		UpdateCupPanel(data);
-		UpdateCupPreviewPanel(data);
+function OnCupPlayerTableChanged(tableName, changes, deletions) {
+	if (changes["brackets"] || changes["current"])
+	{
+		// @TODO - Optimize
+		const cup = PlayerTables.GetAllTableValues(tableName);
+		UpdateCupPanel(cup);
+		UpdateCupPreviewPanel(cup);
 	}
 }
 
@@ -82,5 +85,5 @@ function OnDetailsButtonPressed() {
 (function () {
 	OnCloseButtonPressed();
 
-	HookAndFire("cups", OnCupsNetTableChanged);
+	HookAndFirePlayer("cup", OnCupPlayerTableChanged);
 })();

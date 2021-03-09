@@ -48,6 +48,8 @@ function WWW:Init()
 	self.phases[WWW_STATE_BETS] = Bets
 	self.phases[WWW_STATE_FIGHT] = Fight
 	self.phases[WWW_STATE_POST_FIGHT] = PostFight
+
+	PlayerTables:CreateTable("cups", {rancho={},active={},selections={}}, true)
 end
 
 function WWW:OrderFilter(event)

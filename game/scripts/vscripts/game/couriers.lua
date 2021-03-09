@@ -102,7 +102,7 @@ function Couriers:OnPlayerSelectedCourier(data)
 		local courier = EntIndexToHScript(courier_data)
 
 		if IsValidEntity(courier) then
-			PlayerTables:SetSubTableKeyValuePair(table_name, "selections", selection_key, nil)
+			PlayerTables:SetSubTableValue(table_name, "selections", selection_key, nil)
 
 			self:ActivateRanchoCourier(player_id, courier)
 		end
@@ -112,8 +112,8 @@ end
 function Couriers:ActivateRanchoCourier(player_id, courier)
 	local table_name = self:GetCouriersPlayerTableName(player_id)
 
-	PlayerTables:SetSubTableKeyValuePair(table_name, "rancho", courier:entindex(), nil)
-	PlayerTables:SetSubTableKeyValuePair(table_name, "active", courier:entindex(), true)
+	PlayerTables:SetSubTableValue(table_name, "rancho", courier:entindex(), nil)
+	PlayerTables:SetSubTableValue(table_name, "active", courier:entindex(), true)
 
 	Timers:RemoveTimer(courier.roam_timer)
 	courier:Stop()
@@ -130,7 +130,7 @@ function Couriers:AddCourierToPlayerRancho(player_id, courier_name)
 	self:BasicRoamAI(courier, player_id)
 
 	local table_name = self:GetCouriersPlayerTableName(player_id)
-	PlayerTables:SetSubTableKeyValuePair(table_name, "rancho", courier:entindex(), true)
+	PlayerTables:SetSubTableValue(table_name, "rancho", courier:entindex(), true)
 
 	return courier
 end
@@ -170,7 +170,7 @@ function Couriers:GrantCourierSelectionToPlayer(player_id)
 	end
 
 	local table_name = self:GetCouriersPlayerTableName(player_id)
-	PlayerTables:SetSubTableKeyValuePair(table_name, "selections", DoUniqueString(table_name), new_selection)
+	PlayerTables:SetSubTableValue(table_name, "selections", DoUniqueString(table_name), new_selection)
 end
 
 function Couriers:GetRandomCouriersFromPlayerRancho(player_id, amount)

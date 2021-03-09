@@ -1,4 +1,4 @@
-PLAYERTABLES_VERSION = "0.90"
+PLAYERTABLES_VERSION = "0.91@www"
 
 --[[
   PlayerTables: Player-specific shared state/nettable Library by BMD
@@ -36,9 +36,9 @@ PLAYERTABLES_VERSION = "0.90"
       Returns the current value for this PlayerTable for the given "key", or nil if the key doesn't exist.
     -<> PlayerTables:GetAllTableValues(tableName)
       Returns the current keys and values for the given table.
-    -void PlayerTables:DeleteTableValue(tableName, key)
+    -void PlayerTables:DeleteTableKey(tableName, key)
       Delete a key from a playertable.
-    -void PlayerTables:DeleteTableValues(tableName, keys)
+    -void PlayerTables:DeleteTableKeys(tableName, keys)
       Delete the keys from a playertable given in the keys object.
     -void PlayerTables:SetTableValue(tableName, key, value)
       Set a value for the given key.
@@ -416,7 +416,7 @@ function PlayerTables:SetTableValues(tableName, changes)
   end
 end
 
-function PlayerTables:SetSubTableKeyValuePair(table_name, table_key, key, value)
+function PlayerTables:SetSubTableValue(table_name, table_key, key, value)
 	local subtable = PlayerTables:GetTableValue(table_name, table_key)
 	subtable[key] = value
 	PlayerTables:SetTableValue(table_name, table_key, subtable)

@@ -1,5 +1,8 @@
 if courier_ability_base == nil then
 	courier_ability_base = class({})
+
+	courier_ability_base.attach_to_unit = 0
+	courier_ability_base.attach_to_unit_modifier = ""
 end
 
 function courier_ability_base:GetCastPoint()
@@ -14,28 +17,19 @@ function courier_ability_base:GetAbilityTextureName()
 	return "venomancer_poison_sting"
 end
 
-function courier_ability_base:OnSpellStart(keys)
+function courier_ability_base:OnSpellStart()
 	if IsServer() then
-		local target_unit = self:GetCursorTarget()
-		if IsValidEntity(target_unit) == false then
-			local cursor = self:GetCursorPosition()
-			local closest_units = FindUnitsInRadius(self:GetCaster():GetTeam(),cursor,nil,2000,DOTA_UNIT_TARGET_TEAM_BOTH,DOTA_UNIT_TARGET_BASIC,DOTA_UNIT_TARGET_FLAG_NONE,FIND_CLOSEST,false)
-			for _,unit in pairs(closest_units) do
-				if v:HasModifier("creep_aura") then
-					target_unit = unit
-					break
-				end
-			end
-		end
+		local cursor = self:GetCursorPosition()
 
-		if IsValidEntity(target_unit) == false then
-			return
-		end
-
-		local particle = ParticleManager:CreateParticle("particles/courier_mark.vpcf", PATTACH_ABSORIGIN_FOLLOW, target_unit)
+		local particle = ParticleManager:CreateParticle("particles/courier_mark.vpcf", PATTACH_CUSTOMORIGIN, nil)
+		ParticleManager:SetParticleControl(particle, 0, cursor)
 		ParticleManager:SetParticleControl(particle, 9, TEAM_COLORS[self:GetCaster():GetTeam()])
 		ParticleManager:SetParticleControl(particle, 10, Vector(self:GetCaster():GetTeam(),0,0))
-
-		target_unit:AddNewModifier(self:GetCaster(), self, "modifier_venom_strike", {})
+		
+		local thinker = CreateModifierThinker(self:GetCaster(), self, "modifier_courier_ability_trigger", {attach_to_unit=self.attach_to_unit, particle=particle, attach_to_unit_modifier=self.attach_to_unit_modifier}, cursor, self:GetCaster():GetTeam(), false)
 	end
+end
+
+function courier_ability_base:OnTriggered(data)
+	print("courier_ability_base:OnTriggered")
 end

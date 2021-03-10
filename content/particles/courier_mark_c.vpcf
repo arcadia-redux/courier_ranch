@@ -4,7 +4,7 @@
 	m_bShouldHitboxesFallbackToRenderBounds = false
 	m_nMaxParticles = 32
 	m_flConstantRadius = 32.0
-	m_ConstantColor = [ 131, 248, 249, 150 ]
+	m_ConstantColor = [ 255, 255, 255, 150 ]
 	m_nBehaviorVersion = 10
 	m_nFirstMultipleOverride_BackwardCompat = 1
 	m_controlPointConfigurations = 
@@ -150,7 +150,7 @@
 				m_nVectorAttribute = 6
 				m_vVectorAttributeScale = [ 1.0, 1.0, 1.0 ]
 				m_nControlPoint = 9
-				m_vCPValueScale = [ 1.0, 1.0, 1.0 ]
+				m_vCPValueScale = [ 0.003922, 0.003922, 0.003922 ]
 				m_vCPRelativePosition = [ 0.0, 0.0, 0.0 ]
 				m_vCPRelativeDir = [ 1.0, 0.0, 0.0 ]
 				m_FloatComponentX = 
@@ -342,7 +342,6 @@
 					m_Stops = [  ]
 				}
 			}
-			m_nColorBlendType = "PARTICLE_COLOR_BLEND_MIN"
 		},
 	]
 	m_Children = 

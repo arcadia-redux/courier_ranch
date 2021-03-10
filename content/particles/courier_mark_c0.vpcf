@@ -162,7 +162,7 @@
 				m_nVectorAttribute = 6
 				m_vVectorAttributeScale = [ 1.0, 1.0, 1.0 ]
 				m_nControlPoint = 9
-				m_vCPValueScale = [ 1.0, 1.0, 1.0 ]
+				m_vCPValueScale = [ 0.003922, 0.003922, 0.003922 ]
 				m_vCPRelativePosition = [ 0.0, 0.0, 0.0 ]
 				m_vCPRelativeDir = [ 1.0, 0.0, 0.0 ]
 				m_FloatComponentX = 

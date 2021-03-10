@@ -11,6 +11,7 @@ COURIERS_LEGENDARY = 5
 
 function Couriers:Init()
 	LinkLuaModifier("courier_aura", "game/modifiers/courier_aura", LUA_MODIFIER_MOTION_NONE)
+	LinkLuaModifier("modifier_courier_ability_trigger", "game/courier_abilities/modifier_courier_ability_trigger", LUA_MODIFIER_MOTION_NONE)
 
 	self["Couriers"] = LoadKeyValues("scripts/kv/couriers.kv")
 	self:BuildRarityMap()
@@ -79,10 +80,8 @@ function Couriers:OrderFilter(event)
 
 	if any_couriers then
 		if event.order_type == DOTA_UNIT_ORDER_CAST_POSITION or event.order_type == DOTA_UNIT_ORDER_CAST_TARGET then
-			print(event.order_type)
 			return true
 		else
-			print(event.order_type)
 			return false
 		end
 	end

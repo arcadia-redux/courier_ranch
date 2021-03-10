@@ -2,6 +2,11 @@ if courier_venom_strike == nil then
 	courier_venom_strike = class({})
 
 	LinkLuaModifier("modifier_venom_strike", "game/courier_abilities/venom_strike/modifier_venom_strike", LUA_MODIFIER_MOTION_NONE)
+	LinkLuaModifier("modifier_venom_strike_dot", "game/courier_abilities/venom_strike/modifier_venom_strike_dot", LUA_MODIFIER_MOTION_NONE)
+end
+
+function courier_venom_strike:GetCastPoint()
+	return 0.0
 end
 
 function courier_venom_strike:GetBehavior()
@@ -31,7 +36,9 @@ function courier_venom_strike:OnSpellStart(keys)
 		end
 
 		local particle = ParticleManager:CreateParticle("particles/courier_mark.vpcf", PATTACH_ABSORIGIN_FOLLOW, target_unit)
-		-- ParticleManager:SetParticleControl(particle, 10, Vector(self:GetCaster():GetTeam(),0,0))
+		ParticleManager:SetParticleControl(particle, 9, TEAM_COLORS[self:GetCaster():GetTeam()])
 		ParticleManager:SetParticleControl(particle, 10, Vector(self:GetCaster():GetTeam(),0,0))
+
+		target_unit:AddNewModifier(self:GetCaster(), self, "modifier_venom_strike", {})
 	end
 end

@@ -15,6 +15,7 @@ function DotaMini:Init()
 	self.waypoints_bottom = ExtractWaypointsLocations("dota_mini_waypoint_*_bottom")
 
 	self.buildings = Entities:FindAllByName(self.building_name)
+	self.fow_viewers = {}
 	for key,building in pairs(self.buildings) do 
 		local building_table = {}
 		building_table["unit"] = building
@@ -23,6 +24,8 @@ function DotaMini:Init()
 		building_table["team"] = building:GetTeam()
 
 		self.buildings[key] = building_table
+
+		self.fow_viewers = table.join(self.fow_viewers, AddFOWViewers(building:GetAbsOrigin(), 800, 99999, false))
 	end
 
 	self.spawned_creeps = {}

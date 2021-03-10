@@ -5,6 +5,7 @@ require("libraries/playertables")
 
 require("extensions/init")
 
+require("game/constants")
 require("game/WWW")
 require("game/couriers")
 require("game/armies")
@@ -46,9 +47,20 @@ function GameMode:InitGameMode()
 	GameRules:EnableCustomGameSetupAutoLaunch(true)
 	GameRules:SetCustomGameSetupAutoLaunchDelay(5)
 
+	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_BADGUYS, 0)
+	SetTeamCustomHealthbarColor(DOTA_TEAM_BADGUYS, 255, 28, 28)
+	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_GOODGUYS, 0)
+	SetTeamCustomHealthbarColor(DOTA_TEAM_GOODGUYS, 28, 28, 255)
+	for team=DOTA_TEAM_CUSTOM_1,DOTA_TEAM_CUSTOM_8 do
+		GameRules:SetCustomGameTeamMaxPlayers(team, 1)
+		SetTeamCustomHealthbarColor(team, TEAM_COLORS[team][1], TEAM_COLORS[team][2], TEAM_COLORS[team][3])
+	end
+
 	game_mode_entity:SetCustomGameForceHero("npc_dota_hero_wisp")
-	game_mode_entity:SetFogOfWarDisabled(true)
+	game_mode_entity:SetFogOfWarDisabled(false)
+	game_mode_entity:SetUnseenFogOfWarEnabled(true)
 	game_mode_entity:SetTowerBackdoorProtectionEnabled(false)
+	game_mode_entity:SetCameraDistanceOverride(1400)
 
 	Couriers:Init()
 	Armies:Init()
@@ -71,8 +83,8 @@ function GameMode:OnGameRulesStateChange()
 end
 
 function GameMode:OnEnteredCustomGameSetup()
-	PlayerResource:SetCustomTeamAssignment(0, DOTA_TEAM_GOODGUYS)
+	PlayerResource:SetCustomTeamAssignment(0, DOTA_TEAM_CUSTOM_1)
 
-	GameRules:LockCustomGameSetupTeamAssignment(true)
-	GameRules:FinishCustomGameSetup()
+	-- GameRules:LockCustomGameSetupTeamAssignment(true)
+	-- GameRules:FinishCustomGameSetup()
 end

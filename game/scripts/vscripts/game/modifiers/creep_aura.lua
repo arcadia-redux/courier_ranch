@@ -13,15 +13,15 @@ function creep_aura:IsHidden()
 end
 
 function creep_aura:GetModifierMoveSpeedBonus_Constant(params)
-	return 200
+	return 100 --200
 end
 
 function creep_aura:GetModifierAttackSpeedBonus_Constant(params)
-	return 200
+	return 50 --200
 end
 
 function creep_aura:GetModifierPreAttack_BonusDamage(params)
-	return 75
+	return 5--75
 end
 
 function creep_aura:DeclareFunctions()

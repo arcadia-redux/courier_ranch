@@ -11,6 +11,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_flying_donkey"
@@ -24,6 +25,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_mega_greevil"
@@ -37,6 +39,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_flying_mega_greevil"
@@ -50,6 +53,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_pudge"
@@ -63,6 +67,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_flying_pudge"
@@ -76,6 +81,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_lockjaw"
@@ -89,6 +95,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_flying_lockjaw"
@@ -102,6 +109,7 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
 	"npc_courier_arneyb_rabbit"
@@ -115,9 +123,10 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 
-	"npc_courier_flying_arneyb_rabbit_flying"
+	"npc_courier_flying_arneyb_rabbit"
 	{
 		"BaseClass"					"npc_dota_creature"
 		"Model"						"models/items/courier/arneyb_rabbit/arneyb_rabbit_flying.vmdl"
@@ -128,5 +137,34 @@
 		"StatusManaRegen"			"0"
 
 		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
+	}
+	
+	"npc_courier_venoling"
+	{
+		"BaseClass"					"npc_dota_creature"
+		"Model"						"models/courier/venoling/venoling.vmdl"
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"290"
+		"MovementTurnRate"			"0.5"
+		"StatusMana"				"2"
+		"StatusManaRegen"			"0"
+
+		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
+	}
+
+	"npc_courier_flying_venoling"
+	{
+		"BaseClass"					"npc_dota_creature"
+		"Model"						"models/courier/venoling/venoling_flying.vmdl"
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_FLY"
+		"MovementSpeed"				"275"
+		"MovementTurnRate"			"0.5"
+		"StatusMana"				"2"
+		"StatusManaRegen"			"0"
+
+		"Ability1"					"courier_venom_strike"
+		"Ability2"					"courier_venom_gale"
 	}
 }

@@ -65,6 +65,7 @@
 		"Model"                     "models/props_structures/rock_golem/tower_dire_rock_golem.vmdl"
 		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_NONE"
 		"StatusHealth"				"150"
+		"HealthBarOffset"			"260"
 		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
 		"AttackDamageMin"			"18"
 		"AttackDamageMax"			"22"
@@ -84,6 +85,7 @@
 		"Model"                     "models/props_structures/rock_golem/tower_radiant_rock_golem.vmdl" // models/props_structures/rock_golem/tower_dire_rock_golem.vmdl
 		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_NONE"
 		"StatusHealth"				"150"
+		"HealthBarOffset"			"260"
 		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
 		"AttackDamageMin"			"18"
 		"AttackDamageMax"			"22"

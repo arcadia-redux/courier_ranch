@@ -35,3 +35,11 @@ function ExtractWaypointsLocations(name)
 	end
 	return t
 end
+
+function AddFOWViewers(location, radius, duration, obstructed_Vision)
+	local o = {}
+	for team=DOTA_TEAM_CUSTOM_1,DOTA_TEAM_CUSTOM_8 do
+		AddFOWViewer(team, location, radius, duration, obstructed_Vision)
+	end
+	return o
+end

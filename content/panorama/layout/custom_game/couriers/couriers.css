@@ -79,3 +79,65 @@ DOTAScenePanel
 	vertical-align: bottom;
 	width: 244px;
 }
+
+// Couriers HUD
+
+#CouriersHUD
+{
+	flow-children: down;
+	horizontal-align: right;
+	vertical-align: center;
+}
+
+.CourierHUD
+{
+	border: 1px solid rgb(56, 56, 56);
+	background-image: url("s2r://panorama/images/textures/miniprofile_rock_psd.vtex");
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 256px 100%;
+	width: 118px;
+	height: 190px;
+	flow-children: down;
+	margin-bottom: 10px;
+	transition-property: transform, blur, opacity;
+	transition-duration: 0.5s;
+}
+
+.Appear
+{
+	transform: rotateX( 42deg ) translate3d( 150px, 0px, 0px );
+	blur: gaussian( 2.5 );
+	opacity: 0.0;
+}
+
+.CourierHUD DOTAScenePanel
+{
+	// border: 1px solid rgb(56, 56, 56);
+	height: fill-parent-flow( 1.0 );
+	width: fill-parent-flow( 1.0 );
+}
+
+.CourierHUD #Abilities
+{
+	flow-children: right;
+	horizontal-align: right;
+}
+
+.CourierAbility
+{
+	border: 1px solid rgb(56, 56, 56);
+	border-left-width: 0px;
+	width: 58px;
+	height: 58px;
+}
+
+.CourierHUD #ManaProgress
+{
+	height: 16px;
+}
+
+#ManaProgress #ManaLabel
+{
+	font-size: 11px;
+}

@@ -1,0 +1,80 @@
+#Players
+{
+	flow-children: down;
+	vertical-align: center;
+	margin-bottom: 100px;
+}
+
+.GoldIcon
+{
+	background-image: url("s2r://panorama/images/hud/reborn/gold_small_psd.vtex");
+	background-size: 24px 24px;
+	background-repeat: no-repeat;
+	width: fit-children;
+	height: 24px;
+	margin-left: 3px;
+}
+
+.GoldLabel
+{
+	color: #FFCC33;
+	font-weight: bold;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,YDYGO 540,Gulim,MingLiU;
+	margin-left: 26px;
+	margin-top: 2px;
+}
+
+.Player
+{
+	background-image: url("s2r://panorama/images/textures/miniprofile_rock_psd.vtex");
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 256px 100%;
+	border: 1px solid rgb(31, 31, 31);
+	margin: 6px;
+	flow-children: down;
+	width: 185px;
+	transition-property: position;
+}
+
+.Player.NoPlayer
+{
+	// wash-color: rgba(0, 0, 0, 0.699);
+	blur: gaussian( 2.5 );
+}
+
+.Player .Top
+{
+	height: fit-children;
+	flow-children: right;
+}
+
+.Right
+{
+	flow-children: down;
+	width: fit-children;
+}
+
+DOTAAvatarImage
+{
+	// border: 2px solid transparent;
+	box-shadow: #000000aa 0px 0px 5px 0px;
+	width: 52px;
+	height: 52px;
+}
+
+DOTAUserName
+{
+	padding: 2px;
+	height: 26px;
+}
+
+.NoPlayer DOTAUserName
+{
+	visibility: collapse;
+}
+
+DOTAUserName Label
+{
+	text-overflow: ellipsis;
+}

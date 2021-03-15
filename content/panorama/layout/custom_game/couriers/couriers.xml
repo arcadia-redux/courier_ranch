@@ -1,6 +1,8 @@
 <root>
 	<styles>
-		<include src="s2r://panorama/styles/dotastyles.vcss_c"/>
+		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
+		<include src="s2r://panorama/styles/hudstyles.vcss_c"/>		
+		<include src="s2r://panorama/styles/hud/dota_hud_health_mana.vcss_c" />
 		<include src="file://{resources}/layout/custom_game/couriers/couriers.css"/>
 	</styles>
 
@@ -18,6 +20,22 @@
 				<Label id="CourierName" text="Donkey"/>
 			</Panel>
 		</snippet>
+		<snippet name="CourierHUD">
+			<Panel class="CourierHUD Appear">
+				<Panel id="Abilities">
+					<DOTAAbilityImage class="CourierAbility" id="CourierAbility1" abilityname="" />
+					<DOTAAbilityImage class="CourierAbility" id="CourierAbility2" abilityname="" />
+				</Panel>
+				<ProgressBar id="ManaProgress">
+					<Label id="ManaLabel" class="MonoNumbersFont" hittest="false" text="2 / 2"/>
+					<Panel id="ManaProgress_Left" class="ProgressBarLeft">
+						<Panel class="DotaSceneContainer">
+							<DOTAScenePanel id="ManaBurner" map="scenes/hud/healthbarburner" renderdeferred="false" rendershadows="false" camera="camera_1" hittest="false" particleonly="true"/>
+						</Panel>
+					</Panel>
+				</ProgressBar>
+			</Panel>
+		</snippet>
 	</snippets>
 	<Panel style="width:100%;height:100%;" hittest="false">
 		<Button id="RanchoButton" class="ButtonBevel" onactivate="OnRanchoButtonPressed()">
@@ -26,6 +44,8 @@
 		<Panel id="CourierSelection">
 			<Panel id="CouriersRow">
 			</Panel>
+		</Panel>
+		<Panel id="CouriersHUD">
 		</Panel>
 	</Panel>
 </root>

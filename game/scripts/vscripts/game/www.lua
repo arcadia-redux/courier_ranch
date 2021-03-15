@@ -1,6 +1,5 @@
 if WWW == nil then WWW = class({}) end
 
-require("game/constants")
 require("game/util")
 require("game/maps/dota_mini")
 

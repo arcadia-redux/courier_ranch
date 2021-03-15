@@ -40,7 +40,7 @@ function courier_aura:OnIntervalThink()
 		local relative_location = Vector( 0, 200, 0 )
 		relative_location = RotatePosition( Vector(0,0,0), QAngle( 0, -rotation_angle, 0 ), relative_location )
 
-		local location = GetGroundPosition( relative_location + self.hero_owner:GetAbsOrigin(), self:GetParent() )
+		local location = GetGroundPosition( relative_location + self:GetParent():GetOwnerEntity():GetAbsOrigin(), self:GetParent() )
 		
 		self:GetParent():SetForwardVector(UnitLookAtPoint( self:GetParent(), location))
 		self:GetParent():SetAbsOrigin( location )

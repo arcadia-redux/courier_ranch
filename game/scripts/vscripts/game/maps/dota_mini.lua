@@ -5,15 +5,25 @@ if DotaMini == nil then
 	DotaMini.spawn_locations_goodguys_name = "dota_mini_goodguys_spawn"
 	DotaMini.spawn_locations_badguys_name = "dota_mini_badguys_spawn"
 	DotaMini.building_name = "dota_mini_building"
+	DotaMini.spawn_locations_players_name = "dota_mini_player_spawn"
 end
 
 function DotaMini:Init()
+	-- Record player spawn locations
+	self.spawn_locations_players = {}
+	local player_spawn_entities = Entities:FindAllByName(self.spawn_locations_players_name)
+	for _,ent in pairs(player_spawn_entities) do 
+		self.spawn_locations_players[ent:GetTeam()] = ent:GetAbsOrigin()
+	end
+
+	-- Record creep spawn locations and waypoints
 	self.spawn_locations_goodguys = ExtractEntitiesLocations(self.spawn_locations_goodguys_name)
 	self.spawn_locations_badguys = ExtractEntitiesLocations(self.spawn_locations_badguys_name)
 
 	self.waypoints_top = ExtractWaypointsLocations("dota_mini_waypoint_*_top")
 	self.waypoints_bottom = ExtractWaypointsLocations("dota_mini_waypoint_*_bottom")
 
+	-- Record buildings
 	self.buildings = Entities:FindAllByName(self.building_name)
 	self.fow_viewers = {}
 	for key,building in pairs(self.buildings) do 
@@ -29,6 +39,14 @@ function DotaMini:Init()
 	end
 
 	self.spawned_creeps = {}
+end
+
+function DotaMini:Activate()
+	for _,hero in pairs(HeroList:GetAllHeroes()) do
+		if IsValidEntity(hero) then
+			hero:SetAbsOrigin(self.spawn_locations_players[hero:GetTeamNumber()])
+		end
+	end
 end
 
 function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
@@ -82,10 +100,14 @@ function DotaMini:StopAllCreepsAndPlayVictoryGesture(team)
 			if creep.waypoint_ai_timer then
 				Timers:RemoveTimer(creep.waypoint_ai_timer)
 			end
-			creep:AddNewModifier( creep, nil, "modifier_disarmed", {} )
 			creep:Stop()
 			if creep:GetTeam() == team then
+				creep:AddNewModifier(creep, nil, "modifier_disarmed", {})
+				creep:AddNewModifier(creep, nil, "modifier_attack_immune", {})
+				creep:AddNewModifier(creep, nil, "modifier_magic_immune", {})
 				creep:StartGesture(ACT_DOTA_VICTORY)
+			else
+				creep:Kill(nil, nil)
 			end
 		end
 	end
@@ -106,7 +128,7 @@ function DotaMini:GetTeamWithMostCreeps()
 	elseif teams[DOTA_TEAM_GOODGUYS] < teams[DOTA_TEAM_BADGUYS] then
 		return DOTA_TEAM_BADGUYS
 	else
-		return DOTA_TEAM_NOTEAM
+		return DOTA_TEAM_GOODGUYS
 	end
 end
 
@@ -117,6 +139,7 @@ function DotaMini:RespawnBuildings()
 		elseif building_table.unit:IsAlive() == false then
 			building_table.unit:RespawnUnit()
 		else
+			building_table.unit:SetHealth(building_table.unit:GetMaxHealth())
 		end
 	end
 end

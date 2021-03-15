@@ -6,9 +6,11 @@ require("libraries/playertables")
 require("extensions/init")
 
 require("game/constants")
+require("game/players")
 require("game/WWW")
 require("game/couriers")
 require("game/armies")
+require("game/debug")
 
 function Precache( context )
 	--[[
@@ -40,7 +42,8 @@ function GameMode:InitGameMode()
 	local game_mode_entity = GameRules:GetGameModeEntity()
 	game_mode_entity.GameMode = self
 
-	GameRules:SetStartingGold(10000)
+	Convars:SetBool("sv_cheats", true)
+
 	GameRules:SetPreGameTime(0)
 	GameRules:SetStrategyTime(0)
 	GameRules:SetShowcaseTime(0)
@@ -56,17 +59,20 @@ function GameMode:InitGameMode()
 		SetTeamCustomHealthbarColor(team, TEAM_COLORS[team][1], TEAM_COLORS[team][2], TEAM_COLORS[team][3])
 	end
 
+	game_mode_entity:SetBotThinkingEnabled(false)
 	game_mode_entity:SetCustomGameForceHero("npc_dota_hero_wisp")
-	game_mode_entity:SetFogOfWarDisabled(false)
-	game_mode_entity:SetUnseenFogOfWarEnabled(true)
+	game_mode_entity:SetFogOfWarDisabled(true)
+	-- game_mode_entity:SetUnseenFogOfWarEnabled(true)
 	game_mode_entity:SetTowerBackdoorProtectionEnabled(false)
 	game_mode_entity:SetCameraDistanceOverride(1400)
 
 	Couriers:Init()
 	Armies:Init()
 	WWW:Init()
+	Players:Init()
+	Debug:Init()
 
-	ListenToGameEvent("game_rules_state_change", Dynamic_Wrap(GameMode, 'OnGameRulesStateChange'),  self)
+	ListenToGameEvent("game_rules_state_change", Dynamic_Wrap(self, 'OnGameRulesStateChange'),  self)
 end
 
 function GameMode:OnGameRulesStateChange()
@@ -75,16 +81,17 @@ function GameMode:OnGameRulesStateChange()
 		GameMode:OnEnteredCustomGameSetup()
 	elseif state == DOTA_GAMERULES_STATE_HERO_SELECTION then
 	elseif state == DOTA_GAMERULES_STATE_PRE_GAME then
-		Couriers:FillEmptyRanchos()
 	elseif state == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		WWW:MainLoop()
+		Timers:CreateTimer(function()
+			WWW:MainLoop()
+		end)
 	elseif state >= DOTA_GAMERULES_STATE_POST_GAME then
 	end
 end
 
 function GameMode:OnEnteredCustomGameSetup()
 	PlayerResource:SetCustomTeamAssignment(0, DOTA_TEAM_CUSTOM_1)
-
-	-- GameRules:LockCustomGameSetupTeamAssignment(true)
-	-- GameRules:FinishCustomGameSetup()
+	for team_id=DOTA_TEAM_CUSTOM_2,DOTA_TEAM_CUSTOM_8 do
+		GameRules:AddBotPlayerWithEntityScript("npc_dota_hero_wisp", "WWW Bot", team_id, "", false)
+	end
 end

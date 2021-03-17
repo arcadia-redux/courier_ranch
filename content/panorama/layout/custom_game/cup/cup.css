@@ -9,6 +9,23 @@
 	background-image: url("s2r://panorama/images/backgrounds/gallery_background_png.vtex");
 
 	border: 4px solid rgb(56, 56, 56);
+
+	transition-duration: 0.2s;
+	transition-property: transform, opacity;
+
+	transform: rotateX(3deg) scale3d(1.1, 1.1, 1.1);
+	visibility: visible;
+}
+
+#Cup:enabled
+{
+	opacity: 1.0;
+	transform: none;
+}
+
+#Cup:disabled
+{
+	opacity: 0.0;
 }
 
 #CupStatus
@@ -152,6 +169,12 @@ DOTAScenePanel
 	horizontal-align: right;
 	min-width: 0px;
 	min-height: 0px;
+	padding: 0px;
+}
+
+#CloseButton:hover
+{
+	brightness: 5.0;
 }
 
 #VS
@@ -162,4 +185,51 @@ DOTAScenePanel
 	vertical-align: center;
 	horizontal-align: center;
 	margin-bottom: 15px;
+}
+
+#CupInfo
+{
+	flow-children: down;
+	margin: 10px;
+}
+
+.Title
+{
+	font-family: titleFont;
+	text-shadow: -1px 1px 2px 2.0 #000000;
+	text-transform: uppercase;
+	font-weight: semi-bold;
+	letter-spacing: 3px;
+}
+
+#CupTitle
+{
+	font-size: 28px;
+}
+
+#MapTitle
+{
+	font-size: 22px;
+	color:rgb(155, 19, 148);
+}
+
+#MinimumBetRoot
+{
+	flow-children: right;
+}
+
+.GoldIcon
+{
+	background-image: url("s2r://panorama/images/hud/reborn/gold_small_psd.vtex");
+	background-size: 24px 24px;
+	background-repeat: no-repeat;
+	width: 24px;
+	height: 24px;
+}
+
+#MinimumBetTitle
+{
+	color: #FFCC33;
+	margin-left: 4px;
+	//margin-top: 2px;
 }

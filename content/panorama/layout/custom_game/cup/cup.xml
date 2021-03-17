@@ -1,6 +1,7 @@
 <root>
 	<styles>
 		<include src="s2r://panorama/styles/dotastyles.vcss_c"/>
+		<include src="s2r://panorama/styles/dashboard.vcss_c"/>
 		<include src="file://{resources}/layout/custom_game/cup/cup.css"/>
 	</styles>
 
@@ -34,6 +35,16 @@
 		</Panel>
 		<Panel id="Cup">
 			<Panel id="CloseButton" class="ButtonBevel" onactivate="OnCloseButtonPressed()" hittest="true">
+			</Panel>
+			<Panel id="CupInfo">
+				<Label class="Title" id="CupTitle" text="#1 REGULAR CUP" />
+				<Label class="Title" id="MapTitle" text="DOTA MINI" />
+				<Panel id="MinimumBetRoot">
+					<Label class="Title" text="MINIMUM BET: " />
+					<Panel class="GoldIcon">
+					</Panel>
+					<Label class="Title" id="MinimumBetTitle" text="MINIMUM BET: 100" />
+				</Panel>
 			</Panel>
 			<Panel id="Brackets">
 				<Panel class="ArmyRow Winner">

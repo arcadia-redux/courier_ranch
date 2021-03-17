@@ -5,7 +5,7 @@ require("game/maps/dota_mini")
 
 require("game/phases/preparation")
 require("game/phases/casting")
-require("game/phases/bets")
+require("game/phases/betting")
 require("game/phases/fight")
 require("game/phases/post_fight")
 
@@ -20,9 +20,26 @@ CUPS_DUEL_COUNT[CUPS_BRACKETS_QUARTER] = 4
 CUPS_DUEL_COUNT[CUPS_BRACKETS_SEMI] = 2
 CUPS_DUEL_COUNT[CUPS_BRACKETS_FINAL] = 1
 
+CUPS_MINIMUM_BETS = {}
+CUPS_MINIMUM_BETS[1] = 500
+CUPS_MINIMUM_BETS[2] = 1000
+CUPS_MINIMUM_BETS[3] = 2000
+CUPS_MINIMUM_BETS[4] = 3500
+CUPS_MINIMUM_BETS[5] = 5000
+CUPS_MINIMUM_BETS[6] = 7000
+CUPS_MINIMUM_BETS[7] = 10000
+CUPS_MINIMUM_BETS[8] = 15000
+CUPS_MINIMUM_BETS[9] = 20000
+CUPS_MINIMUM_BETS[10] = 30000
+CUPS_MINIMUM_BETS[11] = 50000
+CUPS_MINIMUM_BETS[12] = 100000
+CUPS_MINIMUM_BETS[13] = 1000000
+CUPS_MINIMUM_BETS[14] = 10000000
+CUPS_MINIMUM_BETS[15] = 100000000
+
 WWW_STATE_PREPARATION = 1
 WWW_STATE_CASTING = 2
-WWW_STATE_BETS = 3
+WWW_STATE_BETTING = 3
 WWW_STATE_FIGHT = 4
 WWW_STATE_POST_FIGHT = 5
 
@@ -44,9 +61,11 @@ function WWW:Init()
 	self.phases = {}
 	self.phases[WWW_STATE_PREPARATION] = Preparation
 	self.phases[WWW_STATE_CASTING] = Casting
-	self.phases[WWW_STATE_BETS] = Bets
+	self.phases[WWW_STATE_BETTING] = Betting
 	self.phases[WWW_STATE_FIGHT] = Fight
 	self.phases[WWW_STATE_POST_FIGHT] = PostFight
+
+	self.current_cup_id = 1
 
 	PlayerTables:CreateTable("cup", {}, true)
 end
@@ -81,8 +100,15 @@ function WWW:OnEntityKilled(keys)
 	end
 end
 
-function WWW:CreateCup()
+function WWW:CreateCup(id)
 	local cup = {}
+
+	cup.id = id or 1
+	if #CUPS_MINIMUM_BETS < cup.id then
+		cup.minimum_bet = CUPS_MINIMUM_BETS[#CUPS_MINIMUM_BETS]
+	else
+		cup.minimum_bet = CUPS_MINIMUM_BETS[cup.id]
+	end
 
 	cup.armies = Armies:GetRandomArmiesDefault(CUPS_ARMY_COUNT)
 
@@ -127,7 +153,7 @@ function WWW:AdvanceCurrentCup()
 	local cup = PlayerTables:GetAllTableValues("cup")
 
 	if cup.current.bracket == CUPS_BRACKETS_FINAL then
-		WWW:CreateCup()
+		WWW:CreateCup(cup.id + 1)
 	else
 		if cup.current.duel == CUPS_DUEL_COUNT[cup.current.bracket] then
 			cup.current.duel = 1

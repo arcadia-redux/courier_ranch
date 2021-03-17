@@ -6,6 +6,10 @@ const CupPanel = $("#Cup");
 const BracketsPanel = $("#Brackets");
 const WinnerSlotPanel = $("#WinnerSlot");
 
+const CupTitleLabel = $("#CupTitle");
+const MapTitleLabel = $("#MapTitle");
+const MinimumBetTitleLabel = $("#MinimumBetTitle");
+
 function UpdateCupPanel(cup) {
 	let current = cup["current"];
 	let currentArmyDuelPanelID = "ArmyDuel" + current["bracket"] + current["duel"];
@@ -72,13 +76,26 @@ function OnCupPlayerTableChanged(tableName, changes, deletions) {
 		UpdateCupPanel(cup);
 		UpdateCupPreviewPanel(cup);
 	}
+	if (changes["id"])
+	{
+		CupTitleLabel.text = "#" + changes["id"] + " Regular Cup";
+	}
+	if (changes["map"])
+	{
+		MapTitleLabel.text = changes["map"];
+	}
+	if (changes["minimum_bet"])
+	{
+		MinimumBetTitleLabel.text = changes["minimum_bet"];
+	}
 }
 
 function OnCloseButtonPressed() {
-	CupPanel.visible = false;
+	CupPanel.enabled = false;
 }
 
 function OnDetailsButtonPressed() {
+	CupPanel.enabled = true;
 	CupPanel.visible = true;
 }
 

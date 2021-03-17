@@ -9,5 +9,5 @@ function Casting:OnThink()
 end
 
 function Casting:OnExit()
-	WWW:StartPhase(WWW_STATE_BETS)
+	WWW:StartPhase(WWW_STATE_BETTING)
 end

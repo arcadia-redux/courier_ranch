@@ -5,14 +5,25 @@
 	margin-bottom: 100px;
 }
 
-.GoldIcon
+.Icon
 {
-	background-image: url("s2r://panorama/images/hud/reborn/gold_small_psd.vtex");
 	background-size: 24px 24px;
 	background-repeat: no-repeat;
 	width: fit-children;
 	height: 24px;
 	margin-left: 3px;
+}
+
+.Icon.Gold
+{
+	background-image: url("s2r://panorama/images/hud/reborn/gold_small_psd.vtex");
+}
+
+.Icon.Bet
+{
+	background-image: url("s2r://panorama/images/hud/reborn/close_guide_btn_psd.vtex");
+	horizontal-align: right;
+	margin-right: 5px;
 }
 
 .GoldLabel
@@ -33,7 +44,7 @@
 	border: 1px solid rgb(31, 31, 31);
 	margin: 6px;
 	flow-children: down;
-	width: 185px;
+	width: 215px;
 	transition-property: position;
 }
 
@@ -52,15 +63,15 @@
 .Right
 {
 	flow-children: down;
-	width: fit-children;
+	width: fill-parent-flow(1.0);
 }
 
 DOTAAvatarImage
 {
 	// border: 2px solid transparent;
 	box-shadow: #000000aa 0px 0px 5px 0px;
-	width: 52px;
-	height: 52px;
+	width: 72px;
+	height: 72px;
 }
 
 DOTAUserName

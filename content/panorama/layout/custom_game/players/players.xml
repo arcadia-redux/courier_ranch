@@ -17,8 +17,11 @@
 					</Panel>
 					<Panel class="Right">
 						<DOTAUserName id="UserName" />
-						<Panel class="GoldIcon">
+						<Panel class="Icon Gold">
 							<Label id="GoldLabel" class="GoldLabel" text="0" />
+						</Panel>
+						<Panel class="Icon Bet">
+							<Label id="BetLabel" class="GoldLabel" text="???" />
 						</Panel>
 					</Panel>
 				</Panel>

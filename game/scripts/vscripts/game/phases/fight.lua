@@ -1,6 +1,6 @@
 if Fight == nil then Fight = class({}) end
 
-Fight.TIME = 30
+Fight.TIME = 35
 
 function Fight:OnEnter()
 	WWW:GetCurrentMap():ReleaseCreeps()

@@ -39,6 +39,7 @@ function DotaMini:Init()
 	end
 
 	self.spawned_creeps = {}
+	self.courier_ability_thinkers = {}
 end
 
 function DotaMini:Activate()
@@ -47,6 +48,10 @@ function DotaMini:Activate()
 			hero:SetAbsOrigin(self.spawn_locations_players[hero:GetTeamNumber()])
 		end
 	end
+end
+
+function DotaMini:AddCourierAbilityThinker(thinker)
+	table.insert(self.courier_ability_thinkers, thinker)
 end
 
 function DotaMini:SpawnCreeps(creeps_goodguys, creeps_badguys)
@@ -132,7 +137,17 @@ function DotaMini:GetTeamWithMostCreeps()
 	end
 end
 
-function DotaMini:RespawnBuildings()
+function DotaMini:Refresh()
+	-- Clear not triggered courier abilities
+	for _,thinker in pairs(self.courier_ability_thinkers) do
+		if IsValidEntity(thinker) then
+			thinker:RemoveAllModifiers(0, true, true, true)
+			UTIL_Remove(thinker)
+		end
+	end
+	self.courier_ability_thinkers = {}
+
+	-- Refresh/respawn map buildings
 	for key,building_table in pairs(self.buildings) do
 		if IsValidEntity(building_table.unit) == false then
 			self.buildings[key].unit = CreateUnitByName(building_table.unit_name, building_table.origin, false, nil, nil, building_table.team)

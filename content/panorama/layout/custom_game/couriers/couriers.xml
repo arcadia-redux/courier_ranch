@@ -3,6 +3,7 @@
 		<include src="s2r://panorama/styles/dotastyles.vcss_c" />
 		<include src="s2r://panorama/styles/hudstyles.vcss_c"/>		
 		<include src="s2r://panorama/styles/hud/dota_hud_health_mana.vcss_c" />
+		<include src="s2r://panorama/styles/hud/dota_hud_ability_panel.vcss_c" />
 		<include src="file://{resources}/layout/custom_game/couriers/couriers.css"/>
 	</styles>
 
@@ -17,14 +18,25 @@
 				<Panel id="CourierPortraitRoot">
 				
 				</Panel>
+				<Panel id="Abilities">
+				</Panel>
 				<Label id="CourierName" text="Donkey"/>
+			</Panel>
+		</snippet>
+		<snippet name="CourierAbility">
+			<Panel class="CourierAbility">
+				<DOTAAbilityImage id="CourierAbilityImage" abilityname="">
+					<Panel id="ActiveOverlay">
+
+					</Panel>
+					<DOTAScenePanel id="AutoCastBorder" map="scenes/hud/autocasting" renderdeferred="false"
+								rendershadows="false" camera="camera_1" hittest="false" particleonly="true"/>
+				</DOTAAbilityImage>
 			</Panel>
 		</snippet>
 		<snippet name="CourierHUD">
 			<Panel class="CourierHUD Appear">
 				<Panel id="Abilities">
-					<DOTAAbilityImage class="CourierAbility" id="CourierAbility1" abilityname="" />
-					<DOTAAbilityImage class="CourierAbility" id="CourierAbility2" abilityname="" />
 				</Panel>
 				<ProgressBar id="ManaProgress">
 					<Label id="ManaLabel" class="MonoNumbersFont" hittest="false" text="2 / 2"/>

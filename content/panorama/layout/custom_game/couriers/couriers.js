@@ -15,7 +15,8 @@ function ShowCourierSelection(couriers, selectionKey) {
 	CouriersSelectionRowPanel.RemoveAndDeleteChildren();
 	Object.keys(couriers).forEach(key => {
 		const courierKey = key;
-		const courierName = Entities.GetUnitName(couriers[courierKey]);
+		const courierEntindex = couriers[courierKey];
+		const courierName = Entities.GetUnitName(courierEntindex);
 		const courierPanel = $.CreatePanel("Panel", CouriersSelectionRowPanel, "Courier");
 		courierPanel.BLoadLayoutSnippet("Courier");
 
@@ -29,7 +30,13 @@ function ShowCourierSelection(couriers, selectionKey) {
 		const courierNameLabel = courierPanel.FindChildTraverse("CourierName");
 		courierNameLabel.text = $.Localize(courierName);
 
+		const abilitiesPanel = courierPanel.FindChildTraverse("Abilities");
+
+		SetupAbility(abilitiesPanel, Entities.GetAbility(courierEntindex, 0), courierEntindex);
+		SetupAbility(abilitiesPanel, Entities.GetAbility(courierEntindex, 1), courierEntindex);
+
 		courierPanel.SetPanelEvent("onactivate", function () {
+			Game.EmitSound("ui_generic_button_click");
 			GameEvents.SendCustomGameEventToServer("couriers:courier_selected", { selection_key: selectionKey, courier_key: parseInt(courierKey) });
 		});
 	});
@@ -60,8 +67,11 @@ function UpdateActiveCouriers(changes) {
 			}
 			else if (courierHUDs[courierEntindexString] && !state)
 			{
-				courierHUDs[courierEntindexString].DeleteAsync(0.5);
-				courierHUDs[courierEntindexString].SetHasClass("Appear", true);
+				const courierHUDPanel = courierHUDs[courierEntindexString];
+				$.Schedule(0.3, function () {
+					courierHUDPanel.SetHasClass("Appear", true);
+					courierHUDPanel.DeleteAsync(0.5);
+				});
 				delete courierHUDs[courierEntindexString];
 			}
 		}
@@ -77,8 +87,8 @@ function AddCourierHUD(entindexString) {
 	courierHUDPanel.BCreateChildren("<DOTAScenePanel environment='default' particleonly='false' unit='" + Entities.GetUnitName(entindex) + "' />");
 	const abilitiesPanel = courierHUDPanel.FindChildTraverse("Abilities");
 
-	SetupAbility(abilitiesPanel.FindChildTraverse("CourierAbility1"), Entities.GetAbility(entindex, 0), entindex);
-	SetupAbility(abilitiesPanel.FindChildTraverse("CourierAbility2"), Entities.GetAbility(entindex, 1), entindex);
+	SetupAbility(abilitiesPanel, Entities.GetAbility(entindex, 0), entindex);
+	SetupAbility(abilitiesPanel, Entities.GetAbility(entindex, 1), entindex);
 
 	const courierManaPanel = courierHUDPanel.FindChildTraverse("ManaProgress");
 
@@ -88,19 +98,40 @@ function AddCourierHUD(entindexString) {
 	return courierHUDPanel;
 }
 
-function SetupAbility(abilityPanel, ability, entindex) {
+function SetupAbility(abilitiesPanel, ability, entindex) {
 	const abilityName = Abilities.GetAbilityName(ability);
-	abilityPanel.abilityname = abilityName;
-	abilityPanel.contextEntityIndex = entindex;
+	const abilityPanel = $.CreatePanel("Panel", abilitiesPanel, "CourierAbility" + ability);
+	abilityPanel.BLoadLayoutSnippet("CourierAbility");
+	abilityPanel.SetAttributeInt("abilityEntindex", ability);
+	const abilityImagePanel = abilityPanel.FindChildTraverse("CourierAbilityImage");
+	abilityImagePanel.abilityname = abilityName;
+	abilityImagePanel.contextEntityIndex = entindex;
 	abilityPanel.SetPanelEvent("onmouseover", function () {
 		$.DispatchEvent( "DOTAShowAbilityTooltipForEntityIndex", abilityPanel, abilityName, entindex );
 	});
 	abilityPanel.SetPanelEvent("onmouseout", function () {
 		$.DispatchEvent( "DOTAHideAbilityTooltip", abilityPanel );
 	});
-	abilityPanel.SetPanelEvent("onactivate", function () {
-		Abilities.ExecuteAbility( ability, entindex, false );
-	});
+	if (Entities.IsValidEntity(entindex))
+	{
+		abilityPanel.SetPanelEvent("onactivate", function () {
+			if (!abilityPanel.BHasClass("Locked"))
+			{
+				Abilities.ExecuteAbility( ability, entindex, false );
+			}
+		});
+	}
+	return abilityPanel;
+}
+
+function UpdateAbility(abilityPanel, locked) {
+	const abilityEntindex = abilityPanel.GetAttributeInt("abilityEntindex", 0);
+	const cooldownOverlayPanel = abilityPanel.FindChildTraverse("CooldownOverlay");
+
+	const remaining = Abilities.GetCooldownTimeRemaining(abilityEntindex);
+	abilityPanel.SetHasClass("Locked", remaining > 0.0 || locked);
+
+	return remaining > 0.0;
 }
 
 function OnCouriersPlayerTableChanged(tableName, changes, deletions) {
@@ -114,6 +145,7 @@ function OnCouriersPlayerTableChanged(tableName, changes, deletions) {
 
 function UpdateCourierHUDs() {
 	$.Schedule(0.1, function () {
+		const isCastingPhase = GameUI.CustomUIConfig().IsCastingPhase();
 		Object.values(courierHUDs).forEach(courierHUDPanel => {
 			const manaLabel = courierHUDPanel.FindChildTraverse("ManaLabel");
 			const entindex = courierHUDPanel.GetAttributeInt("entindex", 0);
@@ -123,6 +155,15 @@ function UpdateCourierHUDs() {
 
 			const courierManaPanel = courierHUDPanel.FindChildTraverse("ManaProgress");
 			courierManaPanel.value = mana / manaMax;
+			
+			let locked = !isCastingPhase;
+			courierHUDPanel.FindChildrenWithClassTraverse("CourierAbility").forEach(function (abilityPanel) {
+				let hasCooldown = UpdateAbility(abilityPanel, locked);
+				if (hasCooldown && !locked)
+				{
+					hasAnyCooldown = true;
+				}
+			})
 		});
 		UpdateCourierHUDs();
 	});

@@ -2,6 +2,7 @@ if Couriers == nil then Couriers = class({}) end
 
 COURIERS_START_AMOUNT = 10
 COURIERS_SELECTION_AMOUNT = 3
+COURIERS_MAX_ACTIVE = 5
 
 COURIERS_COMMON = 1
 COURIERS_UNCOMMON = 2
@@ -121,18 +122,18 @@ function Couriers:ActivateRanchoCourier(player_id, courier)
 	PlayerTables:SetSubTableValue(table_name, "active", courier:entindex(), true)
 
 	Timers:RemoveTimer(courier.roam_timer)
+	courier:SetMana(courier:GetMaxMana())
 	courier:Stop()
-	courier.courier_modifier.start_time = GameRules:GetGameTime()
-	courier.courier_modifier:StartIntervalThink(0)
-	courier.courier_modifier.active = true
 	courier:StartGesture(ACT_DOTA_RUN)
 	courier:SetControllableByPlayer(player_id, true)
+
+	Players:AttachCourierToHero(player_id, courier)
 end
 
 function Couriers:AddNewCourierToPlayerRancho(hero, courier_name)
 	local player_id = hero:GetPlayerOwnerID()
 	local courier = CreateUnitByName(courier_name, self:GetRandomPositionInsideRancho(player_id), true, nil, hero, PlayerResource:GetTeam(player_id))
-	courier.courier_modifier = courier:AddNewModifier(courier, nil, "courier_aura", {})
+	courier:AddNewModifier(courier, nil, "courier_aura", {})
 	self:OnCourierAddedToRancho(player_id, courier)
 
 	local table_name = self:GetCouriersPlayerTableName(player_id)
@@ -142,10 +143,7 @@ function Couriers:AddNewCourierToPlayerRancho(hero, courier_name)
 end
 
 function Couriers:OnCourierAddedToRancho(player_id, courier)
-	if courier.courier_modifier.active then
-		courier.courier_modifier:StartIntervalThink(-1)
-		courier.courier_modifier.active = false
-	end
+	Players:DetachCourierFromHero(player_id, courier)
 	courier:SetAbsOrigin(self:GetRandomPositionInsideRancho(player_id))
 	courier:SetControllableByPlayer(player_id, false)
 	self:BasicRoamAI(courier, player_id)
@@ -200,6 +198,12 @@ function Couriers:GrantCourierSelectionToPlayers()
 end
 
 function Couriers:GrantCourierSelectionToPlayer(player_id)
+	local table_name = self:GetCouriersPlayerTableName(player_id)
+	
+	if table.count(PlayerTables:GetTableValue(table_name, "selections")) >= COURIERS_MAX_ACTIVE then
+		return
+	end
+	
 	-- @TODO
 	-- Take already present selections into account
 	local couriers = self:GetRandomCouriersFromPlayerRancho(player_id, COURIERS_SELECTION_AMOUNT)
@@ -208,7 +212,6 @@ function Couriers:GrantCourierSelectionToPlayer(player_id)
 		table.insert(new_selection, v)
 	end
 
-	local table_name = self:GetCouriersPlayerTableName(player_id)
 	PlayerTables:SetSubTableValue(table_name, "selections", DoUniqueString(table_name), new_selection)
 end
 
@@ -222,7 +225,7 @@ function Couriers:GetRandomCouriersFromPlayerRancho(player_id, amount)
 	local table_name = self:GetCouriersPlayerTableName(player_id)
 	local rancho_couriers = PlayerTables:GetTableValue(table_name, "rancho")
 	
-	return table.random_some(table.make_key_table(rancho_couriers), amount)
+	return table.random_some(table.make_key_table_with_value(rancho_couriers, true), amount)
 end
 
 function Couriers:BasicRoamAI(courier, player_id)

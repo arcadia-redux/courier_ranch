@@ -19,3 +19,10 @@ function ExtractEntityIndices(ents)
 	end
 	return t
 end
+
+function AddUnitParticle(unit, particle)
+	if unit.particles == nil then
+		unit.particles = {}
+	end
+	table.insert(unit.particles, particle)
+end

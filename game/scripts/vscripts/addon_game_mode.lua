@@ -21,7 +21,9 @@ function Precache( context )
 			PrecacheResource( "particle_folder", "particles/folder", context )
 	]]
 
-	PrecacheResource( "particle", "particles/courier_mark.vpcf", context )
+	PrecacheResource("soundfile", "soundevents/game_sounds_heroes/game_sounds_venomancer.vsndevts", context)
+	PrecacheResource("soundfile", "soundevents/game_sounds_items.vsndevts", context)
+	PrecacheResource("particle", "particles/courier_mark.vpcf", context)
 end
 
 function Activate()
@@ -82,7 +84,7 @@ function GameMode:OnGameRulesStateChange()
 	elseif state == DOTA_GAMERULES_STATE_HERO_SELECTION then
 	elseif state == DOTA_GAMERULES_STATE_PRE_GAME then
 	elseif state == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		Timers:CreateTimer(function()
+		Timers:CreateTimer(1.0, function()
 			WWW:MainLoop()
 		end)
 	elseif state >= DOTA_GAMERULES_STATE_POST_GAME then

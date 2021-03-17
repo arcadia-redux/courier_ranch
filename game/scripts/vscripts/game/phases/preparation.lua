@@ -1,10 +1,10 @@
 if Preparation == nil then Preparation = class({}) end
 
-Preparation.TIME = 10
+Preparation.TIME = 5
 
 function Preparation:OnEnter()
 	WWW:GetCurrentMap():Activate()
-	WWW:GetCurrentMap():RespawnBuildings()
+	WWW:GetCurrentMap():Refresh()
 	WWW:SpawnCurrentCreeps()
 	Couriers:GrantCourierSelectionToPlayers()
 	-- Couriers:GrantCourierSelectionToPlayers()

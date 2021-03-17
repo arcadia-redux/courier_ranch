@@ -162,6 +162,16 @@ function table.make_key_table(t)
     return r
 end
 
+function table.make_key_table_with_value(t, value)
+    local r = {}
+    for k, v in pairs(t) do
+		if v == value then
+			table.insert(r, k)
+		end
+    end
+    return r
+end
+
 function table.print(t, i)
 	if not i then i = 0 end
 	if not t then return end

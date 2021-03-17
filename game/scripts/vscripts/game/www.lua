@@ -32,7 +32,7 @@ function WWW:Init()
 	LinkLuaModifier("player_aura", "game/modifiers/player_aura", LUA_MODIFIER_MOTION_NONE)
 	LinkLuaModifier("dummy_aura", "game/modifiers/dummy_aura", LUA_MODIFIER_MOTION_NONE)
 
-	ListenToGameEvent('npc_spawned', Dynamic_Wrap(self, "OnHeroSpawned"), self)
+	ListenToGameEvent('npc_spawned', Dynamic_Wrap(self, "OnNPCSpawned"), self)
 	ListenToGameEvent("entity_killed", Dynamic_Wrap(self, "OnEntityKilled"), self)
 
 	CustomGameEventManager:RegisterListener("www:on_next_phase_button_pressed", function (_, data)
@@ -55,21 +55,28 @@ function WWW:OrderFilter(event)
 	return Couriers:OrderFilter(event)
 end
 
-function WWW:OnHeroSpawned(keys)
+function WWW:OnNPCSpawned(keys)
 	local npc = EntIndexToHScript(keys.entindex)
-	if npc:IsRealHero() then
-		npc:AddNewModifier( npc, nil, "player_aura", {} )
-	end
 end
 
 function WWW:OnEntityKilled(keys)
 	local killed_unit = EntIndexToHScript(keys.entindex_killed)
 
-	if killed_unit and killed_unit:IsBuilding() then
-		if string.match(killed_unit:GetUnitName(), "npc_dota_badguys_fort")
-		or string.match(killed_unit:GetUnitName(), "npc_dota_goodguys_fort") then
-			local won_team = EntIndexToHScript(keys.entindex_attacker):GetTeam()
-			FireGameEventLocal("fort_destroyed", {won_team=won_team})
+	if killed_unit then
+		-- Destroy unit particles
+		if killed_unit.particles then
+			for _,v in pairs(killed_unit.particles) do
+				ParticleManager:DestroyParticle(v, false)
+				ParticleManager:ReleaseParticleIndex(v)
+			end
+		end
+		-- Track fort destroyed event
+		if killed_unit:IsBuilding() then
+			if string.match(killed_unit:GetUnitName(), "npc_dota_badguys_fort")
+			or string.match(killed_unit:GetUnitName(), "npc_dota_goodguys_fort") then
+				local won_team = EntIndexToHScript(keys.entindex_attacker):GetTeam()
+				FireGameEventLocal("fort_destroyed", {won_team=won_team})
+			end
 		end
 	end
 end

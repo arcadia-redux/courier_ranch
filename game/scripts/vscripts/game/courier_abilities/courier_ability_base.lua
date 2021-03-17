@@ -39,6 +39,8 @@ function courier_ability_base:OnSpellStart()
 	if IsServer() then
 		local cursor = self:GetCursorPosition()
 
+		EmitSoundOnLocationWithCaster(cursor, "DOTA_Item.HotD.Activate", self:GetCaster())
+
 		local particle = ParticleManager:CreateParticle("particles/courier_mark.vpcf", PATTACH_CUSTOMORIGIN, nil)
 		ParticleManager:SetParticleControl(particle, 0, cursor)
 		ParticleManager:SetParticleControl(particle, 9, TEAM_COLORS[self:GetCaster():GetTeam()])
@@ -49,13 +51,14 @@ function courier_ability_base:OnSpellStart()
 			attach_to_unit = self.attach_to_unit,
 			attach_to_unit_modifier = self.attach_to_unit_modifier
 		}, cursor, self:GetCaster():GetTeam(), false)
+		WWW:GetCurrentMap():AddCourierAbilityThinker(thinker)
 
 		-- Put cooldown on all abilities
 		local caster = self:GetCaster()
 		for i=0,caster:GetAbilityCount()-1 do
 			local ability = caster:GetAbilityByIndex(i)
 			if IsValidEntity(ability) then
-				-- ability:StartCooldown(self:GetCooldown())
+				ability:StartCooldown(self:GetCooldown())
 			end
 		end
 	end

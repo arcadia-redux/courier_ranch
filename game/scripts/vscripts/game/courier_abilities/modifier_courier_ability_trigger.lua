@@ -22,7 +22,7 @@ function modifier_courier_ability_trigger:OnIntervalThink()
 			if unit:HasModifier("creep_aura") then
 				if self.creation_table.attach_to_unit == 1 then
 					ParticleManager:SetParticleControlEnt(self.creation_table.particle, 0, unit, PATTACH_ABSORIGIN_FOLLOW, "follow_origin", unit:GetAbsOrigin(), true)
-					ParticleManager:ReleaseParticleIndex(self.creation_table.particle)
+					AddUnitParticle(unit, self.creation_table.particle)
 					unit:AddNewModifier(self:GetCaster(), self:GetAbility(), self.creation_table.attach_to_unit_modifier, {})
 				else
 					ParticleManager:DestroyParticle(self.creation_table.particle, true)
@@ -31,9 +31,18 @@ function modifier_courier_ability_trigger:OnIntervalThink()
 						thinker_origin = self:GetParent():GetAbsOrigin()
 					})
 				end
+				self.creation_table.particle = nil
 				UTIL_Remove(self:GetParent())
 				break
 			end
+		end
+	end
+end
+
+function modifier_courier_ability_trigger:OnRemoved()
+	if IsServer() then
+		if self.creation_table.particle then
+			ParticleManager:DestroyParticle(self.creation_table.particle, true)
 		end
 	end
 end

@@ -1,7 +1,7 @@
 #CourierSelection
 {
 	width: 724px;
-	height: 388px;
+	height: 468px;
 
 	vertical-align: center;
 	horizontal-align: center;
@@ -13,6 +13,7 @@
 
 #CouriersRow
 {
+	height: 100%;
 	flow-children: right;
 	width: fit-children;
 	horizontal-align: center;
@@ -20,7 +21,7 @@
 
 .Courier
 {
-	height: 380px;
+	height: 100%;
 	width: 220px;
 	flow-children: down;
 }
@@ -34,6 +35,22 @@
 {
 	horizontal-align: center;
 	margin: 10px;
+}
+
+.Courier #Abilities
+{
+	horizontal-align: center;
+}
+
+.Courier #Abilities .CourierAbility
+{
+	width: 78px;
+	height: 78px;
+}
+
+.Courier #AutoCastBorder
+{
+	visibility: collapse;
 }
 
 #CourierPortraitRoot {
@@ -118,9 +135,13 @@ DOTAScenePanel
 	width: fill-parent-flow( 1.0 );
 }
 
-.CourierHUD #Abilities
+#Abilities
 {
 	flow-children: right;
+}
+
+.CourierHUD #Abilities
+{
 	horizontal-align: right;
 }
 
@@ -130,6 +151,64 @@ DOTAScenePanel
 	border-left-width: 0px;
 	width: 58px;
 	height: 58px;
+
+	transition-property: opacity;
+	transition-duration: 0.175s;
+}
+
+#CourierAbilityImage
+{
+	transition-property: saturation, brightness;
+	transition-duration: 0.5s;
+}
+
+.CourierAbility.Locked #CourierAbilityImage
+{
+	//blur: gaussian( 2.5 );
+	saturation: 0.1;
+	brightness: 0.2;
+}
+
+#AutoCastBorder
+{
+	// margin: -2px;
+	horizontal-align: center;
+	vertical-align: center;
+	pre-transform-scale2d: 1.15;
+}
+
+.CourierAbility.Locked #AutoCastBorder
+{
+	visibility: collapse;
+}
+
+#ActiveOverlay
+{
+	background-image: url("s2r://panorama/images/hud/learnspell_png.vtex");
+	background-size: 100% 100%;
+	width: 100%;
+	height: 100%;
+}
+
+.CourierAbility.Locked #ActiveOverlay
+{
+	visibility: collapse;
+}
+
+DOTAAbilityImage
+{
+	width: 100%;
+	height: 100%;
+}
+
+.CourierAbility:active
+{
+    sound: "ui_generic_button_click";
+}
+
+.CourierAbility:hover
+{
+	opacity: 0.6;
 }
 
 .CourierHUD #ManaProgress
@@ -140,4 +219,9 @@ DOTAScenePanel
 #ManaProgress #ManaLabel
 {
 	font-size: 11px;
+}
+
+#Cooldown
+{
+	margin: 0px;
 }

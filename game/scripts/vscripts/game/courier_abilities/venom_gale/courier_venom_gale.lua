@@ -18,6 +18,7 @@ function courier_venom_gale:OnTriggered(data)
     ParticleManager:SetParticleControlEnt(particle, 0, nil, PATTACH_CUSTOMORIGIN_FOLLOW, "attach_head", triggered_unit:GetOrigin(), true)
     ParticleManager:SetParticleControlForward(particle, 1, (triggered_unit:GetOrigin() - triggered_unit:GetOrigin()):Normalized())
 	ParticleManager:ReleaseParticleIndex(particle)
+	triggered_unit:EmitSound("Hero_Venomancer.VenomousGale")
 	local units = FindUnitsInRadius(triggered_unit:GetTeam(), thinker_origin, nil, 600, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE + DOTA_UNIT_TARGET_FLAG_NO_INVIS, FIND_ANY_ORDER, false)
     for _,unit in pairs(units) do
         unit:AddNewModifier(unit, self, "modifier_venom_gale_dot", { duration = 5 })
